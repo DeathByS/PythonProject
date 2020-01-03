@@ -20,7 +20,7 @@ class SyncClient:
         if self.client is None:
             self.client = ModbusClient(self.connectIp, port=502) 
             self.client.connect()
-            print("connect success")
+            print(self.client)
         
         print("after connect", self.client)
 

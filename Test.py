@@ -24,7 +24,7 @@ class Form(QtWidgets.QDialog):
         # 여기서는 일정시간에 한번씩 plc에서 Data를 읽어오기 위하여 사용한다.
         self.timer = QTimer(self)
 
-        # 버튼과 
+        # 버튼
         self.startButton.clicked.connect(self.slotStartButton)
         self.stopButton.clicked.connect(self.slotStopButton)
         self.changeButton.clicked.connect(self.slotChangeButton)
@@ -33,7 +33,7 @@ class Form(QtWidgets.QDialog):
         self.isStart = False
 
         # ip 
-        self.ip = "0"
+        self.ip = "kwtkorea.iptime.org"
         
     def changeLabelText(self):
         coils, regs = self.plcConnect.runSyncClient()
