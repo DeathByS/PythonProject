@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>220</height>
+    <height>252</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,12 +41,19 @@
    <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>연결 위치</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QComboBox" name="connectListBox"/>
      </item>
      <item>
       <widget class="QLabel" name="ipLabel">
        <property name="text">
-        <string>TextLabel</string>
+        <string/>
        </property>
       </widget>
      </item>

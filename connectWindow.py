@@ -23,13 +23,13 @@ class Form(QtWidgets.QDialog):
     # 첫 페이지의 연결 리스트 선택 항목으로 띄워줌
     def initConnectionList(self):
     
-        with open('filename.csv', 'r', encoding='utf-8') as f:
+        with open('ConnectionList.csv', 'r', encoding='utf-8') as f:
             rdr = csv.reader(f)
             self.connectListDict = dict(rdr)
             print(self.connectListDict)
             
 
-        with open('filename.csv', 'r', encoding='utf-8') as f:
+        with open('ConnectionList.csv', 'r', encoding='utf-8') as f:
             rdr = csv.reader(f)
             for loop in rdr:
                 self.ui.connectListBox.addItem(loop[0])
