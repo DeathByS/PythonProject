@@ -8,6 +8,9 @@ from PyQt5 import QtGui
 from PyQt5 import uic   
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui  import QPixmap
+from PyQt5.QtWidgets import QSizePolicy
+from PyQt5.QtWidgets import QFrame
 import time
  
  
@@ -34,24 +37,36 @@ class Form(QtWidgets.QDialog):
 
         # ip 
         self.ip = "kwtkorea.iptime.org"
+
+        #image Label 
+        pixmap = QPixmap("offImage.jpg")
+        self.imageLabel.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+        self.imageLabel.setSizePolicy(QSizePolicy.Ignored,QSizePolicy.Ignored)
+        self.imageLabel.setScaledContents(True)
+        self.ui.imageLabel.setPixmap(QPixmap(pixmap))
+
+        # lcd Panel control
+        self.ui.lcdNumber_3.display(20.5)
         
     def changeLabelText(self):
         coils, regs = self.plcConnect.runSyncClient()
-        self.ui.testLabel.setText(str(regs))
+        self.ui.testLabel.setText(str(regs[0]))
+        self.ui.lcdNumber_3.display(float(regs[0]))
     
            
     @pyqtSlot()
     def slotStartButton(self):
 
         if self.isStart == False:
-         self.isStart = True
-         self.plcConnect.connectClient(self.ip)
-         self.timer.setInterval(2000)
-         self.timer.start()
-         self.timer.timeout.connect(self.changeLabelText)
+            self.isStart = True
+            self.plcConnect.connectClient(self.ip)
+            self.timer.setInterval(2000)
+            self.timer.start()
+            self.timer.timeout.connect(self.changeLabelText)
         
     @pyqtSlot()
     def slotStopButton(self):
+        
         self.isStart = False
         self.timer.stop()
         self.plcConnect.closeClient()
