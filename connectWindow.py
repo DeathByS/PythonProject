@@ -2,10 +2,12 @@
  
 import sys
 import csv
-import copy
+
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
+from MainWindow import MainWindow
+from PyQt5.QtCore import QModelIndex
 
 
  
@@ -16,6 +18,9 @@ class Form(QtWidgets.QDialog):
         self.ui.show()
         self.connectListDict = {}
         self.initConnectionList()
+
+        # self.mainWindow = MainWidow()
+    
         
         self.ui.connectButton.clicked.connect(self.slotConnectButton)
 
@@ -23,21 +28,29 @@ class Form(QtWidgets.QDialog):
     # 첫 페이지의 연결 리스트 선택 항목으로 띄워줌
     def initConnectionList(self):
     
-        with open('ConnectionList.csv', 'r', encoding='utf-8') as f:
-            rdr = csv.reader(f)
-            self.connectListDict = dict(rdr)
-            print(self.connectListDict)
-            
 
+        # 오류가 난 이유(시도 해볼 것 ) list로 정확하게 만든 후 a_list.append(row) 이런 식으로 시도해 볼 것 
         with open('ConnectionList.csv', 'r', encoding='utf-8') as f:
             rdr = csv.reader(f)
-            for loop in rdr:
-                self.ui.connectListBox.addItem(loop[0])
+            
+            connList = [] 
+            
+            for row in rdr:
+                 connList.append(row)
+                #  print(connList)
+                 self.ui.connectListBox.addItem(row[0])
+
+            self.connectListDict = dict(connList)
+            # print(self.connectListDict)
+
 
     @pyqtSlot()
     def slotConnectButton(self):
-        connectIpLocation = self.ui.connectListBox.currentText()
-        self.ui.ipLabel.setText(self.connectListDict[connectIpLocation])
+        connectLocation = self.ui.connectListBox.currentText()
+        self.ui.ipLabel.setText(self.connectListDict[connectLocation])
+        # self.ui.stackedWidget.setCurrentIndex(1)
+        self.mainWindow = MainWindow()
+        self.mainWindow.ui.show()
 
 
 
