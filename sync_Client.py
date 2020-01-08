@@ -1,4 +1,6 @@
 from pymodbus.client.sync import ModbusTcpClient as ModbusClient
+from pymodbus.exceptions import ConnectionException
+import pymodbus
 import logging
 
 
@@ -18,9 +20,15 @@ class SyncClient:
         self.connectIp = connectIp
 
         if self.client is None:
-            self.client = ModbusClient(self.connectIp, port=502) 
-            self.client.connect()
-            print(self.client)
+            
+            try:
+             self.client = ModbusClient(self.connectIp, port=502) 
+             if self.client.connect() is None:
+                 print("self.client")
+                 return "error"
+            except pymodbus.exceptions.ConnectionException: 
+             print("error")
+             return "error"
         
         print("after connect", self.client)
 
@@ -34,15 +42,20 @@ class SyncClient:
     def runSyncClient(self):
 
         log.debug("Write to a Coil and read back")
-        
+        if self.client is not None:
+
+            try:
         # rq = client.write_coil(0, False, unit=UNIT)
-        readCoils = self.client.read_coils(0, 10, unit=UNIT) 
-        print("rr.coil", readCoils.bits)
+                readCoils = self.client.read_coils(0, 10, unit=UNIT) 
+                print("rr.coil", readCoils.bits)
         # assert(rr.bits[0] == True)          # test the expected value
         # log.debug("Write to a holding register and read back")
         # rq = client.write_register(30, 10, unit=UNIT)
-        readHoldingRegs = self.client.read_holding_registers(0, 11, unit=UNIT)
-        print("rr.registers", readHoldingRegs.registers)
+                readHoldingRegs = self.client.read_holding_registers(0, 11, unit=UNIT)
+                print("rr.registers", readHoldingRegs.registers)
+            except:
+                print("read error")
+                return "read error", "read error"
         # assert(not rq.isError())     # test that we are not an error
         # print("rr.registers", rr.registers)
         # ----------------------------------------------------------------------- #
@@ -50,7 +63,10 @@ class SyncClient:
         # ----------------------------------------------------------------------- #
         # self.client.close()
         # time.sleep(2)
-        return readCoils.bits, readHoldingRegs.registers
+            return readCoils.bits, readHoldingRegs.registers
+        else:
+            print("check connect")
+            return 1
         # return 
 
 # 코드가 인터프리터에 의해 직접 실행 될 때 실행되는 부분

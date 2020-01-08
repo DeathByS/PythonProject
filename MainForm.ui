@@ -16,47 +16,275 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <property name="modal">
+   <bool>false</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="tabShape">
+      <enum>QTabWidget::Rounded</enum>
+     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="movable">
+      <bool>true</bool>
      </property>
      <widget class="QWidget" name="tab">
+      <property name="font">
+       <font>
+        <family>굴림체</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <attribute name="title">
-       <string>쪽</string>
+       <string>정보</string>
       </attribute>
-      <widget class="QLabel" name="label_2">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>240</y>
-         <width>982</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="3">
+        <layout class="QVBoxLayout" name="verticalLayout_16">
+         <item>
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>프레스 롤</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_27"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>슬러지 펼침</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_26"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>슬러지 공급</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_25"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_24"/>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>전류</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>전력량</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>전압</string>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>드럼 속도</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_2"/>
+         </item>
+         <item row="8" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_5"/>
+         </item>
+         <item row="10" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_6"/>
+         </item>
+         <item row="6" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_4"/>
+         </item>
+         <item row="4" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         </item>
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>냉각수 온도</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>변압기 온도</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="4">
+        <layout class="QVBoxLayout" name="verticalLayout_17">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_29">
+           <item>
+            <widget class="QLCDNumber" name="lcdNumber_7"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_30"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_8"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_35"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_9"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_31"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_10"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_28"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_11"/>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_1">
+           <property name="autoFillBackground">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_2"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_8"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_3"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_9"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_4"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_10"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_5"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_11"/>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="lcdNumber_6"/>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="2">
+        <layout class="QVBoxLayout" name="verticalLayout_23">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
+      <property name="font">
+       <font>
+        <family>AmeriGarmnd BT</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <attribute name="title">
-       <string>쪽</string>
+       <string>세부 정보</string>
       </attribute>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>190</x>
-         <y>250</y>
-         <width>56</width>
-         <height>12</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="QTableView" name="tableView"/>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

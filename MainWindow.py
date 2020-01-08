@@ -3,18 +3,25 @@
 import sys
 import csv
 
+
 from PyQt5 import QtWidgets
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
+from sync_Client import SyncClient 
+from PyQt5.QtCore import QTimer
 from MainWindowTab1 import MainWindowTab1
-
 
  
 class MainWindow(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        QtWidgets.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("MainForm.ui")
+    def __init__(self):
+        # QtWidgets.QDialog.__init__(self, parent)
+        
+        #         super().__init__() uic.loadUi('MainForm.ui', self)
+        #  closeEvent 사용을 하려면 self.ui에 form을 load 하는것이 아니라 자기 자신에게 Form을 로드해야됨.
+        super().__init__()
+        uic.loadUi('MainForm.ui', self)
+
         # self.ui.tabWidget.addTab(MainWindowTab1(), MainWindowTab1.__name__)
         # self.ui.tabWidget.addTab(MainWindowTab1(), MainWindowTab1.__name__)
        
@@ -22,9 +29,24 @@ class MainWindow(QtWidgets.QDialog):
         self.mainWindowTab1 = MainWindowTab1(self)
         # MainWindowTab1.init_widget(self)
 
+        # plc 와 연결하여 plc Data를 받아오는 객체
+        self.plcConnect = SyncClient()
+        self.ip = None
+        # QTimer 정해진 작업을 정해진 시간마다 반복하게 하기 위해.
+        # 여기서는 일정시간에 한번씩 plc에서 Data를 읽어오기 위하여 사용한다.
+
+    def connect(self, ip = "kwtkorea.iptime.org"):
+        self.plcConnect.connectClient(ip)
+
+    def closeEvent(self, QCloseEvent):
+        print("Enter CloseEvent")
+        self.plcConnect.closeClient()
+        self.deleteLater()
+        QCloseEvent.accept()
 
 
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    w = MainWindow()
-    sys.exit(app.exec())
+# if __name__ == '__main__':
+#     app = QtWidgets.QApplication(sys.argv)
+#     w = MainWindow()
+#     sys.exit(app.exec())
+   

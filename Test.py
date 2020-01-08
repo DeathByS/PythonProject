@@ -56,8 +56,7 @@ class Form(QtWidgets.QDialog):
            
     @pyqtSlot()
     def slotStartButton(self):
-
-        if self.isStart == False:
+          if self.isStart == False:
             self.isStart = True
             self.plcConnect.connectClient(self.ip)
             self.timer.setInterval(2000)
