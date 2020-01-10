@@ -13,6 +13,12 @@
     <height>640</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>맑은 고딕 Semilight</family>
+    <pointsize>14</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
@@ -25,7 +31,7 @@
      <property name="font">
       <font>
        <family>맑은 고딕</family>
-       <pointsize>20</pointsize>
+       <pointsize>18</pointsize>
       </font>
      </property>
      <property name="autoFillBackground">
@@ -35,7 +41,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize">
       <size>
@@ -57,12 +63,38 @@
        <string>정보</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="3">
+       <item row="0" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="5">
         <layout class="QVBoxLayout" name="verticalLayout_16">
          <item>
           <widget class="QLabel" name="label_15">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>프레스 롤</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -71,8 +103,23 @@
          </item>
          <item>
           <widget class="QLabel" name="label_14">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>슬러지 펼침</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -81,8 +128,23 @@
          </item>
          <item>
           <widget class="QLabel" name="label_7">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>슬러지 공급</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -91,8 +153,23 @@
          </item>
          <item>
           <widget class="QLabel" name="label_13">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>TextLabel</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -101,36 +178,155 @@
          </item>
          <item>
           <widget class="QLabel" name="label_6">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
+       <item row="0" column="3">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_2">
+         <item row="9" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>냉각수 온도</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>변압기 온도</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_5"/>
+         </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_5">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>전류</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_10">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
            <property name="text">
             <string>전력량</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
            <property name="autoFillBackground">
             <bool>false</bool>
            </property>
            <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
+            <enum>QFrame::WinPanel</enum>
            </property>
            <property name="frameShadow">
             <enum>QFrame::Sunken</enum>
@@ -141,20 +337,35 @@
            <property name="scaledContents">
             <bool>false</bool>
            </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>드럼 속도</string>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
           <layout class="QVBoxLayout" name="verticalLayout_2"/>
          </item>
-         <item row="8" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout_5"/>
+         <item row="11" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <family>맑은 고딕</family>
+             <pointsize>18</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>드럼 속도</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item row="10" column="0">
           <layout class="QVBoxLayout" name="verticalLayout_6"/>
@@ -165,54 +376,85 @@
          <item row="4" column="0">
           <layout class="QVBoxLayout" name="verticalLayout_3"/>
          </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>냉각수 온도</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>변압기 온도</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
-       <item row="0" column="4">
+       <item row="0" column="6">
         <layout class="QVBoxLayout" name="verticalLayout_17">
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_29">
-           <item>
-            <widget class="QLCDNumber" name="lcdNumber_7"/>
-           </item>
-          </layout>
+          <widget class="QLCDNumber" name="lcdNumber_7">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_30"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_8"/>
+          <widget class="QLCDNumber" name="lcdNumber_8">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_35"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_9"/>
+          <widget class="QLCDNumber" name="lcdNumber_9">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_31"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_10"/>
+          <widget class="QLCDNumber" name="lcdNumber_10">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_28"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_11"/>
+          <widget class="QLCDNumber" name="lcdNumber_11">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_34">
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -223,44 +465,85 @@
            <property name="autoFillBackground">
             <bool>false</bool>
            </property>
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
           </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_7"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_2"/>
+          <widget class="QLCDNumber" name="lcdNumber_2">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_8"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_3"/>
+          <widget class="QLCDNumber" name="lcdNumber_3">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_9"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_4"/>
+          <widget class="QLCDNumber" name="lcdNumber_4">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_10"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_5"/>
+          <widget class="QLCDNumber" name="lcdNumber_5">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_11"/>
          </item>
          <item>
-          <widget class="QLCDNumber" name="lcdNumber_6"/>
+          <widget class="QLCDNumber" name="lcdNumber_6">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
-       <item row="0" column="2">
-        <layout class="QVBoxLayout" name="verticalLayout_23">
+       <item row="0" column="7">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="label_9">
            <property name="text">
             <string/>
            </property>
@@ -282,7 +565,13 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QTableView" name="tableView"/>
+        <widget class="QTableWidget" name="tableWidget">
+         <column>
+          <property name="text">
+           <string>발생시간</string>
+          </property>
+         </column>
+        </widget>
        </item>
       </layout>
      </widget>

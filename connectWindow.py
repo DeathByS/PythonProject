@@ -13,10 +13,14 @@ from PyQt5 import QtGui
 
  
 class Form(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        QtWidgets.QDialog.__init__(self, parent)
-        self.ui = uic.loadUi("ConnectForm.ui")
-        self.ui.show()
+    def __init__(self):
+
+        super().__init__()
+        uic.loadUi('connectForm.ui', self)
+
+        # QtWidgets.QDialog.__init__(self, parent)
+        # self.ui = uic.loadUi("ConnectForm.ui")
+        # self.ui.show()
         self.connectListDict = {}
         self.initConnectionList()
 
@@ -24,7 +28,7 @@ class Form(QtWidgets.QDialog):
     
         # exit_action = QtGui.QAction('Exit', self)
         
-        self.ui.connectButton.clicked.connect(self.slotConnectButton)
+        self.connectButton.clicked.connect(self.slotConnectButton)
 
     # 파일에 저장되어있는 연결 위치와 아이피값을 받아와 딕셔너리로 저장 후
     # 첫 페이지의 연결 리스트 선택 항목으로 띄워줌
@@ -38,7 +42,7 @@ class Form(QtWidgets.QDialog):
             for row in rdr:
                  connList.append(row)
                 #  print(connList)
-                 self.ui.connectListBox.addItem(row[0])
+                 self.connectListBox.addItem(row[0])
 
             self.connectListDict = dict(connList)
             # print(self.connectListDict)
@@ -48,8 +52,8 @@ class Form(QtWidgets.QDialog):
 
     @pyqtSlot()
     def slotConnectButton(self):
-        connectLocation = self.ui.connectListBox.currentText()
-        self.ui.ipLabel.setText(self.connectListDict[connectLocation])
+        connectLocation = self.connectListBox.currentText()
+        self.ipLabel.setText(self.connectListDict[connectLocation])
         self.mainWindow = MainWindow()
         self.mainWindow.connect(self.connectListDict[connectLocation])
         self.mainWindow.show()
@@ -59,5 +63,6 @@ class Form(QtWidgets.QDialog):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     w = Form()
+    w.show()
     sys.exit(app.exec())
     

@@ -19,12 +19,11 @@ class MainWindowTab1(QWidget):
         self.initWidget()
 
         self.timer = QTimer(self)
-        self.timer.setInterval(2000)
+        self.timer.setInterval(5000)
         self.timer.start()
         self.timer.timeout.connect(self.changeLcdNumber)
         
     def initWidget(self):
-        # self.parent.ui.label_2.setText("기본 정보 페이지")
         self.lcdList.append(self.parent.lcdNumber_1)
         self.lcdList.append(self.parent.lcdNumber_2)
         self.lcdList.append(self.parent.lcdNumber_3)
@@ -39,15 +38,17 @@ class MainWindowTab1(QWidget):
         
     def changeLcdNumber(self):
     
-        print("parent.plcconnect?", self.parent.plcConnect)
-        coils, regs = self.parent.plcConnect.runSyncClient()
+        coils, regs = self.parent.plcConnect.readPlcData()
+        # colis2, regs2 = self.parent.plcConnect2.readPlcData()
        
         if coils == 'read error' or regs == 'read error':
             self.timer.stop()
             print("read error, check Connect ")
             return "error"
              
-        else:    
+        else:
+            # self.parent.plcWriteObject1.writePlcData(0, regs)
+            # self.parent.plcWriteObject1.writePlcData(20,regs2)   
             for i in range(11):
                 self.lcdList[i].display(float(regs[i]))
 

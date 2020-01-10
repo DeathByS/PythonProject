@@ -31,12 +31,18 @@ class MainWindow(QtWidgets.QDialog):
 
         # plc 와 연결하여 plc Data를 받아오는 객체
         self.plcConnect = SyncClient()
+        self.plcWriteObject1 = SyncClient()
+        self.plcConnect2 = SyncClient()
         self.ip = None
         # QTimer 정해진 작업을 정해진 시간마다 반복하게 하기 위해.
         # 여기서는 일정시간에 한번씩 plc에서 Data를 읽어오기 위하여 사용한다.
 
     def connect(self, ip = "kwtkorea.iptime.org"):
-        self.plcConnect.connectClient(ip)
+        # com_plcSim
+        self.plcConnect.connectClient(ip,1000)
+        # plc_1
+        # self.plcConnect2.connectClient(ip, 1000) 
+        # self.plcWriteObject1.connectClient(ip, 502)
 
     def closeEvent(self, QCloseEvent):
         print("Enter CloseEvent")
