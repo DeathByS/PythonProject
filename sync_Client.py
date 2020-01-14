@@ -52,20 +52,25 @@ class SyncClient:
     def writePlcData(self, startRegister=600, data=[1]*15):
         self.client.write_registers(startRegister, data, unit=UNIT)
 
+    def readCoil(self, startBit=0, endBit=26):
+        
+        readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
+        print("rr.coil", readCoils.bits)
 
-    def readPlcData(self):
+        return readCoils.bits
+
+    def readRegister(self, startBit=0, endBit =15):
 
         log.debug("Write to a Coil and read back")
         if self.client is not None:
 
             try:
         # rq = client.write_coil(0, False, unit=UNIT)
-                readCoils = self.client.read_coils(0, 10, unit=UNIT) 
-                print("rr.coil", readCoils.bits)
+              
         # assert(rr.bits[0] == True)          # test the expected value
         # log.debug("Write to a holding register and read back")
         # rq = client.write_register(30, 10, unit=UNIT)
-                readHoldingRegs = self.client.read_holding_registers(0, 15, unit=UNIT)
+                readHoldingRegs = self.client.read_holding_registers(startBit, endBit, unit=UNIT)
                 print("rr.registers", readHoldingRegs.registers)
             except:
                 print("read error")
@@ -77,7 +82,7 @@ class SyncClient:
         # ----------------------------------------------------------------------- #
         # self.client.close()
         # time.sleep(2)
-            return readCoils.bits, readHoldingRegs.registers
+            return readHoldingRegs.registers
         else:
             print("check connect")
             return 1

@@ -49,7 +49,7 @@ class Form(QtWidgets.QDialog):
         self.ui.lcdNumber_3.display(20.5)
         
     def changeLabelText(self):
-        coils, regs = self.plcConnect.readPlcData()
+        coils, regs = self.plcConnect.readRegister()
         self.ui.testLabel.setText(str(regs[0]))
         self.ui.lcdNumber_3.display(float(regs[0]))
     
