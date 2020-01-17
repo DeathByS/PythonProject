@@ -81,5 +81,38 @@ class Alarms(enum.Enum):
     AIRPRESSURESOLVALVECPTRIP   = 34
     SLIPRINGTEMPOVER            = 35
     TRANSFORMERSACBTRIP         = 36
-    ENDLIST                     = 36
+    ENDLIST                     = 37
 
+    
+
+
+
+
+class Machine(enum.Enum):
+
+    ALARMCOUNTSTART             = 50
+
+    FIRSTCOIL                   = 0
+    SECONDCOIL                  = 160
+    THRIDCOIL                   = 320
+
+    FIRSTREG                    = 0
+    SECONDREG                   = 100
+    THIRDREG                    = 200
+
+
+class OperatingTime(enum.Enum):
+
+    ALARMCOUNT                  = 900
+    TOTALMIN                    = 910
+    TOTALHOUR                   = 911
+    DRUMMIN                     = 912
+    DRUMHOUR                    = 913
+    FILTERMIN                   = 914
+    FILTERHOUR                  = 915
+    CLEANERMIN                  = 916
+    CLEANERHOUR                 = 917
+    WATERTANKMIN                = 918
+    WATERTANKHOUR               = 919
+    CLOSESENSORMIN              = 920
+    CLOSESENSORHOUR             = 921

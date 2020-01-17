@@ -23,7 +23,7 @@ class MainWindowStatusTab(QWidget):
         self.initWidget()
 
         self.timer = QTimer(self)
-        self.timer.setInterval(3000)
+        self.timer.setInterval(5000)
         self.timer.start()
         self.timer.timeout.connect(self.changeStatus)
         
@@ -113,7 +113,7 @@ class MainWindowStatusTab(QWidget):
                 self.statusLabelList[labelListIndex].setText(status)
                 self.statusLabelList[labelListIndex].setStyleSheet(backgroundcolor)
                 self.statusLabelList[labelListIndex].setFont(QFont('맑은 고딕', 18))
-                print(labelListIndex)
+                # print(labelListIndex)
                 labelListIndex = labelListIndex + 1 
            
 

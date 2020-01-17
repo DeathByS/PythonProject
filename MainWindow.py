@@ -13,6 +13,7 @@ from PyQt5.QtCore import QTimer
 from MainWindowInfoTab import MainWindowInfoTab
 from MainWindowStatusTab import MainWindowStatusTab
 from MainWindowAlarmTab import MainWindowAlarmTab
+from MainWindowOperatingTimeTab import MainWindowOperatingTimeTab
 
  
 class MainWindow(QtWidgets.QDialog):
@@ -31,8 +32,9 @@ class MainWindow(QtWidgets.QDialog):
         self.mainWindowInfoTab = MainWindowInfoTab(self)
         self.mainWindowStatusTab = MainWindowStatusTab(self)
         self.mainWindowAlarmTab = MainWindowAlarmTab(self)
+        # self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
         
-        self.mainWindowAlarmTab.loadAlarmList()
+        # self.mainWindowAlarmTab.insertAlarmList()
         # MainWindowTab1.init_widget(self)
 
         # plc 와 연결하여 plc Data를 받아오는 객체

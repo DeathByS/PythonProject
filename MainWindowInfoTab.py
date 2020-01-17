@@ -20,7 +20,7 @@ class MainWindowInfoTab(QWidget):
         self.initWidget()
 
         self.timer = QTimer(self)
-        self.timer.setInterval(3000)
+        self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.changeLcdNumber)
         
@@ -46,6 +46,7 @@ class MainWindowInfoTab(QWidget):
         #regs 10, 11번 = 슬러지 투입 / 배출량 Kg 단위에서 Ton 단위로 변환
         regs[Regs.INPUT.value] = regs[Regs.INPUT.value] / 1000
         regs[Regs.OUTPUT.value] = regs[Regs.OUTPUT.value] / 1000
+        # 전압 값을 소수점 단위로 나타내기 위해 
         regs[Regs.DCV.value] = regs[Regs.DCV.value] / 10
         
         # colis2, regs2 = self.parent.plcConnect2.readRegister()

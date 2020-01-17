@@ -4,6 +4,16 @@ from logging import handlers
 import pymodbus
 import logging
 
+class FilterMsg(logging.Filter):
+
+    def filterMsg(self, recode):
+
+        msg = recode.getMessage()
+        print("filter "+msg)
+
+        return True
+
+
 FILE_MAX_BYTE = 1 * 1024 * 1024
 # FORMAT = ('%(asctime)-15s %(threadName)-15s '
 #           '%(levelname)-8s %(module)-15s:%(lineno)-8s %(message)s')
@@ -14,12 +24,19 @@ LogFormatter = logging.Formatter('%(asctime)-15s %(threadName)-15s '
           '%(levelname)-8s %(message)s')
 LogHandler = handlers.TimedRotatingFileHandler(filename='PLC.log', when='midnight', interval=1, encoding='utf-8')
 LogHandler.setFormatter(LogFormatter)
+
 LogHandler.suffix = "%Y%m%d"
+LogHandler.addFilter(FilterMsg())
 
 logging.basicConfig(format=FORMAT)
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(LogHandler)
+# log.addFilter(FilterMsg())
+# print("msg : " + msg)
+
+
+
 
 UNIT = 0x1
 class SyncClient:
@@ -55,13 +72,13 @@ class SyncClient:
     def readCoil(self, startBit=0, endBit=26):
         
         readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
-        print("rr.coil", readCoils.bits)
+        # print("rr.coil", readCoils.bits)
 
         return readCoils.bits
 
     def readRegister(self, startBit=0, endBit =15):
 
-        log.debug("Write to a Coil and read back")
+        # log.debug("Write to a Coil and read back")
         if self.client is not None:
 
             try:
@@ -71,7 +88,7 @@ class SyncClient:
         # log.debug("Write to a holding register and read back")
         # rq = client.write_register(30, 10, unit=UNIT)
                 readHoldingRegs = self.client.read_holding_registers(startBit, endBit, unit=UNIT)
-                print("rr.registers", readHoldingRegs.registers)
+                # print("rr.registers", readHoldingRegs.registers)
             except:
                 print("read error")
                 return "read error", "read error"
@@ -89,16 +106,11 @@ class SyncClient:
         # return 
 
 # 코드가 인터프리터에 의해 직접 실행 될 때 실행되는 부분
-# if __name__ == "__main__":
-   
+if __name__ == "__main__":
+    test = SyncClient()
+    test.connectClient()
+    holdingRegitsters = test.readRegister()
+    coils = test.readCoil()
+    test.closeClient()
 
-
-# test = SyncClient()
-
-# test.connectClient()
-
-# coils, holdingRegitsters = test.runSyncClient()
-
-# test.closeClient()
-
-# print(coils, holdingRegitsters)
+    print(coils, holdingRegitsters)
