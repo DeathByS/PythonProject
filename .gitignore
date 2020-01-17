@@ -1,0 +1,47 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+PLC.log
+=======
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+# Logs and databases #
+######################
+*.log.*
+*.log
+*.sql
+*.sqlite
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 36cb0971c70f3517084ee392728e9bf24f46288a
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
+PLC.log.20200115
+PLC.log.20200114
+PLC.log.20200113
+PLC.log.20200110
+PLC.log.20200109
+PLC.log
+PLC.log.20200109
