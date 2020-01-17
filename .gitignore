@@ -4,8 +4,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 PLC.log
 =======
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
 =======
 >>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
 =======
@@ -22,6 +25,7 @@ PLC.log
 *.log
 *.sql
 *.sqlite
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -45,3 +49,5 @@ PLC.log.20200110
 PLC.log.20200109
 PLC.log
 PLC.log.20200109
+=======
+>>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
