@@ -9,7 +9,7 @@ from PyQt5.QtGui import QFont
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtCore import QTimer
-from enums import Coils
+from enums import Coils, Machine
 
 import time
 

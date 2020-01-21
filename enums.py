@@ -81,7 +81,17 @@ class Alarms(enum.Enum):
     AIRPRESSURESOLVALVECPTRIP   = 34
     SLIPRINGTEMPOVER            = 35
     TRANSFORMERSACBTRIP         = 36
-    ENDLIST                     = 37
+    DRUMEXC                     = 37
+    SCRAPEREXC                  = 38
+    WASHINGEXC                  = 39
+    # 근접센서
+    PSENSOREXC                  = 40
+    # 물탱크센서
+    WTSENSOREXC                 = 41
+    FILTEREXC                   = 42
+
+    ENDLIST                     = 43
+
 
     
 
@@ -91,6 +101,7 @@ class Alarms(enum.Enum):
 class Machine(enum.Enum):
 
     ALARMCOUNTSTART             = 50
+    EXCALARMSWITCHSTART         = 128
 
     FIRSTCOIL                   = 0
     SECONDCOIL                  = 160
@@ -103,16 +114,17 @@ class Machine(enum.Enum):
 
 class OperatingTime(enum.Enum):
 
-    ALARMCOUNT                  = 900
-    TOTALMIN                    = 910
-    TOTALHOUR                   = 911
-    DRUMMIN                     = 912
-    DRUMHOUR                    = 913
-    FILTERMIN                   = 914
-    FILTERHOUR                  = 915
-    CLEANERMIN                  = 916
-    CLEANERHOUR                 = 917
-    WATERTANKMIN                = 918
-    WATERTANKHOUR               = 919
-    CLOSESENSORMIN              = 920
-    CLOSESENSORHOUR             = 921
+    TOTALMIN                    = 21
+    TOTALHOUR                   = 22
+    DRUMMIN                     = 23
+    DRUMHOUR                    = 24
+    SLUDGESCRAPERMIN            = 25
+    SLUDGESCRAPERHOUR           = 26
+    CLEANERMIN                  = 27
+    CLEANERHOUR                 = 28
+    CLOSESENSORMIN              = 29
+    CLOSESENSORHOUR             = 30
+    WATERTANKMIN                = 31
+    WATERTANKHOUR               = 32
+    FILTERMIN                   = 33
+    FILTERHOUR                  = 34

@@ -32,7 +32,7 @@ class MainWindow(QtWidgets.QDialog):
         self.mainWindowInfoTab = MainWindowInfoTab(self)
         self.mainWindowStatusTab = MainWindowStatusTab(self)
         self.mainWindowAlarmTab = MainWindowAlarmTab(self)
-        # self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
+        self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
         
         # self.mainWindowAlarmTab.insertAlarmList()
         # MainWindowTab1.init_widget(self)

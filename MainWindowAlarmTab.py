@@ -66,12 +66,13 @@ class MainWindowAlarmTab(QWidget):
                 alarmCountText = str(self.alarmCount[i.value])
                 item.append(QTableWidgetItem(alarmCountText))
             
-                for i in range(0, self.parent.tableWidget.columnCount()):
-                    self.parent.tableWidget.setItem(0, i, item[i])
+                for j in range(0, self.parent.tableWidget.columnCount()):
+                     self.parent.tableWidget.setItem(0, j, item[j])
                 
-                self.showMessageBox(alarmCauseText)
+                print(i)
+                self.showMessageBox(alarmCauseText, i.value)
 
-    def showMessageBox(self, text):
+    def showMessageBox(self, text, number):
         msgbox = QtWidgets.QMessageBox(self)
         # msgbox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;")
         msgbox.setWindowTitle('알람 발생')
@@ -79,18 +80,26 @@ class MainWindowAlarmTab(QWidget):
         msgbox.setStandardButtons(QtWidgets.QMessageBox.Yes)
         msgboxYesBtn = msgbox.button(QtWidgets.QMessageBox.Yes)
         msgboxYesBtn.setText("확인")
-        msgbox.exec_()
+
+        ret = msgbox.exec_()
+
+        if ret == QtWidgets.QMessageBox.Yes:
+            print('yes' + str(number))
+            if(number in range(Alarms.DRUMEXC.value, Alarms.FILTEREXC.value + 1, 1)):
+                print("SENDMSG")
+                switch = [False] * 6
+                switch[number - Alarms.DRUMEXC.value] = True
+                print("MSG : " + str(switch))
+                self.parent.plcConnect.writeCoils(Machine.EXCALARMSWITCHSTART.value, switch)
+                
+                switch[number - Alarms.DRUMEXC.value] = False
+                self.parent.plcConnect.writeCoils(Machine.EXCALARMSWITCHSTART.value, switch)
+
+
         # msgbox.question(self, 'MessageBox title', 'Here comes message', msgboxYesBtn)
     # def initWidget(self):
        
         
     # def changeLcdNumber(self):
     
-        
-
-              
-
-
-
-
-        
+    

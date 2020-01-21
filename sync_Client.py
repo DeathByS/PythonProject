@@ -32,7 +32,7 @@ logging.basicConfig(format=FORMAT)
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(LogHandler)
-# log.addFilter(FilterMsg())
+log.addFilter(FilterMsg())
 # print("msg : " + msg)
 
 
@@ -66,14 +66,24 @@ class SyncClient:
         if self.client is not None:
             self.client.close()
             self.client = None
-    def writePlcData(self, startRegister=600, data=[1]*15):
+
+    def writeCoils(self, startCoil=0, data=[False]*6):
+        
+        if(startCoil is None):
+            print("start bit is Null")
+            return
+        else:
+            self.client.write_coils(startCoil, data)
+            
+
+    def writeRegisters(self, startRegister=600, data=[1]*15):
         self.client.write_registers(startRegister, data, unit=UNIT)
 
     def readCoil(self, startBit=0, endBit=26):
         
         readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
         # print("rr.coil", readCoils.bits)
-
+        
         return readCoils.bits
 
     def readRegister(self, startBit=0, endBit =15):
@@ -111,6 +121,7 @@ if __name__ == "__main__":
     test.connectClient()
     holdingRegitsters = test.readRegister()
     coils = test.readCoil()
+    test.writeCoils()
     test.closeClient()
 
     print(coils, holdingRegitsters)

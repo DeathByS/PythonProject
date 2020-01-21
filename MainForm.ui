@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>892</width>
     <height>640</height>
    </rect>
   </property>
@@ -41,7 +41,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <property name="iconSize">
       <size>
@@ -1473,8 +1473,56 @@
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout_5">
-         <item row="4" column="3">
-          <widget class="QLabel" name="label_Change_WaterTank">
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_30">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>슬러지 스크레퍼</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLabel" name="label_35">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>여과포</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_31">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>여과포 세척노즐</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QLabel" name="label_Change_Filter">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1489,8 +1537,8 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="3">
-          <widget class="QLabel" name="label_Change_Close">
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_Time_1">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1521,8 +1569,24 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="3">
-          <widget class="QLabel" name="label_Change_Filter">
+         <item row="0" column="1">
+          <widget class="QLabel" name="label">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>총 가동 시간</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="3">
+          <widget class="QLabel" name="label_Change_WaterTank">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1537,7 +1601,39 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="3">
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_29">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string>드럼 코팅</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="3">
+          <widget class="QLabel" name="label_Change_Close">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
           <widget class="QLabel" name="label_Change_Cleaner">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
@@ -1553,39 +1649,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="label_Time_2">
-           <property name="frameShape">
-            <enum>QFrame::WinPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Sunken</enum>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="label_31">
-           <property name="frameShape">
-            <enum>QFrame::WinPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Sunken</enum>
-           </property>
-           <property name="text">
-            <string>여과포 시간</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
+         <item row="5" column="1">
           <widget class="QLabel" name="label_34">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
@@ -1601,8 +1665,8 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
-          <widget class="QLabel" name="label_35">
+         <item row="4" column="1">
+          <widget class="QLabel" name="label_33">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1617,8 +1681,8 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="label_33">
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_Time_3">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1626,7 +1690,7 @@
             <enum>QFrame::Sunken</enum>
            </property>
            <property name="text">
-            <string>세척 노즐</string>
+            <string/>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -1665,6 +1729,22 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="3">
+          <widget class="QLabel" name="label_Change_Drum_2">
+           <property name="frameShape">
+            <enum>QFrame::WinPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
          <item row="5" column="2">
           <widget class="QLabel" name="label_Time_6">
            <property name="frameShape">
@@ -1681,8 +1761,8 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="label_Time_3">
+         <item row="1" column="2">
+          <widget class="QLabel" name="label_Time_2">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1697,24 +1777,8 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="label_29">
-           <property name="frameShape">
-            <enum>QFrame::WinPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Sunken</enum>
-           </property>
-           <property name="text">
-            <string>드럼 시간</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_Time_1">
+         <item row="6" column="2">
+          <widget class="QLabel" name="label_Time_7">
            <property name="frameShape">
             <enum>QFrame::WinPanel</enum>
            </property>
@@ -1723,22 +1787,6 @@
            </property>
            <property name="text">
             <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label">
-           <property name="frameShape">
-            <enum>QFrame::WinPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Sunken</enum>
-           </property>
-           <property name="text">
-            <string>총 가동 시간</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>

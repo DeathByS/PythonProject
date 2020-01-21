@@ -31,17 +31,17 @@ class MainWindowOperatingTimeTab(QWidget):
         self.timeLableList.append(self.parent.label_Time_4)
         self.timeLableList.append(self.parent.label_Time_5)
         self.timeLableList.append(self.parent.label_Time_6)
+        self.timeLableList.append(self.parent.label_Time_7)
 
     def changeTimeLabel(self):
 
-        timeList = self.parent.plcConnect.readRegister(OperatingTime.ALARMCOUNT.value, OperatingTime.CLOSESENSORHOUR.value)
+        timeList = self.parent.plcConnect.readRegister(OperatingTime.TOTALMIN.value, OperatingTime.FILTERHOUR.value)
 
         timeListIndex = 0
 
         print(timeList)
         
-        for i in range(OperatingTime.TOTALHOUR.value - OperatingTime.ALARMCOUNT.value,
-                        OperatingTime.CLOSESENSORHOUR.value - OperatingTime.ALARMCOUNT.value + 2, 2):
+        for i in range(1, OperatingTime.FILTERHOUR.value - OperatingTime.TOTALMIN.value + 2, 2):
             print(i)
             timeText = str(timeList[i]) +"시간 " + str(timeList[i-1]) +"분" 
             self.timeLableList[timeListIndex].setText(timeText)
