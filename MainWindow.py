@@ -40,15 +40,23 @@ class MainWindow(QtWidgets.QDialog):
         # plc 와 연결하여 plc Data를 받아오는 객체
         self.plcConnect = SyncClient()
         self.ip = None
-        # QTimer 정해진 작업을 정해진 시간마다 반복하게 하기 위해.
-        # 여기서는 일정시간에 한번씩 plc에서 Data를 읽어오기 위하여 사용한다.
+        
+        # 현장의 기계 A,B,C호기의 시작 주소를 나타내고, 각 탭에서 시작 주소를 통해 A,B,C호기의 데이터를 출력
+
+        self.machineStartReg = 0
+        self.machineStartCoil = 0
+
+        
 
     def connect(self, ip = "kwtkorea.iptime.org"):
-        # com_plcSim
         self.plcConnect.connectClient(ip ,502)
-        # plc_1
-        # self.plcConnect2.connectClient(ip, 1000) 
-        # self.plcWriteObject1.connectClient(ip, 502)
+
+
+    # 각 현장의 A,B,C 호기의 저장 데이터 시작 번지를 설정한다
+    def setStartCoilandReg(self, coil, reg):
+        self.machineStartCoil = coil
+        self.machineStartReg = reg
+
 
     def closeEvent(self, QCloseEvent):
         print("Enter CloseEvent")

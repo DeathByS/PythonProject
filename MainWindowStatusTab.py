@@ -23,7 +23,7 @@ class MainWindowStatusTab(QWidget):
         self.initWidget()
 
         self.timer = QTimer(self)
-        self.timer.setInterval(5000)
+        self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.changeStatus)
         
@@ -47,7 +47,8 @@ class MainWindowStatusTab(QWidget):
         
     def changeStatus(self):
     
-        coils = self.parent.plcConnect.readCoil(0, 95)
+        coils = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + Coils.READY.value, 
+                                                        Coils.WATCHDOG.value - Coils.READY.value)
         status = 'OFF'
         if coils == 'read error':
             self.timer.stop()
@@ -57,7 +58,7 @@ class MainWindowStatusTab(QWidget):
         else:
           
         #  구동 준비
-            if(coils[Coils.READY.value] == 0):
+            if(coils[Coils.READY.value - Coils.READY.value] == 0):
                 backgroundcolor = 'background-color:#f0f0f0;'
             else:
                 backgroundcolor = 'background-color:#84ff00;'
@@ -66,42 +67,42 @@ class MainWindowStatusTab(QWidget):
             self.statusLabelList[0].setFont(QFont('맑은 고딕', 18))  
 
         # 현장 / 원격 모드
-            if(coils[Coils.FIELDMODE.value] == 0):
+            if(coils[Coils.FIELDMODE.value - Coils.READY.value] == 0):
                 self.statusLabelList[1].setStyleSheet('background-color:#f0f0f0;')
                 self.statusLabelList[1].setFont(QFont('맑은 고딕', 18))  
                 self.statusLabelList[2].setStyleSheet('background-color:#84ff00;')
                 self.statusLabelList[2].setFont(QFont('맑은 고딕', 18))     
-            elif(coils[Coils.REMOTEMODE.value] == 0):
+            elif(coils[Coils.REMOTEMODE.value - Coils.READY.value] == 0):
                 self.statusLabelList[2].setStyleSheet('background-color:#f0f0f0;')
                 self.statusLabelList[2].setFont(QFont('맑은 고딕', 18))  
                 self.statusLabelList[1].setStyleSheet('background-color:#84ff00;')
                 self.statusLabelList[1].setFont(QFont('맑은 고딕', 18))     
         
         # 수동 / 자동조작
-            if(coils[Coils.MANUAL.value] == 0):
+            if(coils[Coils.MANUAL.value - Coils.READY.value] == 0):
                 self.statusLabelList[3].setStyleSheet('background-color:#f0f0f0;')
                 self.statusLabelList[3].setFont(QFont('맑은 고딕', 18))  
                 self.statusLabelList[4].setStyleSheet('background-color:#84ff00;')
                 self.statusLabelList[4].setFont(QFont('맑은 고딕', 18))     
-            elif(coils[Coils.AUTO.value] == 0):
+            elif(coils[Coils.AUTO.value - Coils.READY.value] == 0):
                 self.statusLabelList[4].setStyleSheet('background-color:#f0f0f0;')
                 self.statusLabelList[4].setFont(QFont('맑은 고딕', 18))  
                 self.statusLabelList[3].setStyleSheet('background-color:#84ff00;')
                 self.statusLabelList[3].setFont(QFont('맑은 고딕', 18))     
         # 자동 시작 / 자동 멈춤
-            if(coils[Coils.AUTOMATICSTART.value] == 0):
+            if(coils[Coils.AUTOMATICSTART.value - Coils.READY.value] == 0):
                 self.statusLabelList[5].setStyleSheet('background-color:#f0f0f0;')
                 self.statusLabelList[5].setFont(QFont('맑은 고딕', 18))  
                 self.statusLabelList[6].setStyleSheet('background-color:#84ff00;')
                 self.statusLabelList[6].setFont(QFont('맑은 고딕', 18))     
-            elif(coils[Coils.AUTOMATICSTOP.value] == 0):
+            elif(coils[Coils.AUTOMATICSTOP.value - Coils.READY.value] == 0):
                 self.statusLabelList[6].setStyleSheet('background-color:#f0f0f0;')
                 self.statusLabelList[6].setFont(QFont('맑은 고딕', 18))  
                 self.statusLabelList[5].setStyleSheet('background-color:#84ff00;')
                 self.statusLabelList[5].setFont(QFont('맑은 고딕', 18))     
 
             labelListIndex = 7
-            for i in range(Coils.CAMMOTER.value, Coils.SLIPRINGCOLLINGFAN.value + 1):
+            for i in range(Coils.CAMMOTER.value  - Coils.READY.value, Coils.SLIPRINGCOLLINGFAN.value  - Coils.READY.value + 1):
                 if coils[i] == 0:
                     status = 'OFF'
                     backgroundcolor = 'background-color:#ec2400;'

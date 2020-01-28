@@ -83,10 +83,10 @@ class SyncClient:
         
         readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
         # print("rr.coil", readCoils.bits)
-        
+
         return readCoils.bits
 
-    def readRegister(self, startBit=0, endBit =15):
+    def readRegister(self, startBit=0, count =15):
 
         # log.debug("Write to a Coil and read back")
         if self.client is not None:
@@ -97,7 +97,7 @@ class SyncClient:
         # assert(rr.bits[0] == True)          # test the expected value
         # log.debug("Write to a holding register and read back")
         # rq = client.write_register(30, 10, unit=UNIT)
-                readHoldingRegs = self.client.read_holding_registers(startBit, endBit, unit=UNIT)
+                readHoldingRegs = self.client.read_holding_registers(startBit, count, unit=UNIT)
                 # print("rr.registers", readHoldingRegs.registers)
             except:
                 print("read error")

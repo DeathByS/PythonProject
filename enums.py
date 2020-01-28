@@ -10,11 +10,11 @@ class Regs(enum.Enum):
     DCA                = 5
     DRUMCOLLINGWATER   = 6
     TRANSFORMERSTEMP   = 7
-    INPUT              = 10
-    OUTPUT             = 11
-    WATERRATE          = 12
-    LEFTBALANCE        = 13
-    RIGHTBALANCE       = 14
+    INPUT              = 8
+    OUTPUT             = 9
+    WATERRATE          = 10
+    LEFTBALANCE        = 11
+    RIGHTBALANCE       = 12
     
 
 

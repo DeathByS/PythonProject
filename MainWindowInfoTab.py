@@ -7,7 +7,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtCore import QTimer
-from enums import Regs
+from enums import Regs, Machine
 import time
 
 class MainWindowInfoTab(QWidget):
@@ -42,12 +42,21 @@ class MainWindowInfoTab(QWidget):
         
     def changeLcdNumber(self):
     
-        regs = self.parent.plcConnect.readRegister()
+        regs = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Regs.DRUMFRQ.value, 
+                                                   Regs.RIGHTBALANCE.value + 1)
         #regs 10, 11번 = 슬러지 투입 / 배출량 Kg 단위에서 Ton 단위로 변환
         regs[Regs.INPUT.value] = regs[Regs.INPUT.value] / 1000
         regs[Regs.OUTPUT.value] = regs[Regs.OUTPUT.value] / 1000
         # 전압 값을 소수점 단위로 나타내기 위해 
         regs[Regs.DCV.value] = regs[Regs.DCV.value] / 10
+
+        # 현장 데이터에서 / 10 해줘야 정상 데이터로 표시됨
+        regs[Regs.DRUMFRQ.value] = regs[Regs.DRUMFRQ.value] / 10
+        regs[Regs.PRESSROLLFRQ.value] = regs[Regs.PRESSROLLFRQ.value] / 10
+        regs[Regs.SLUDEGSUPPLYFRQ.value] = regs[Regs.SLUDEGSUPPLYFRQ.value] / 10
+        regs[Regs.SLUDEGSPREADFRQ.value] = regs[Regs.SLUDEGSPREADFRQ.value] / 10
+        regs[Regs.DRUMCOLLINGWATER.value] = regs[Regs.DRUMCOLLINGWATER.value] / 10
+        regs[Regs.TRANSFORMERSTEMP.value] = regs[Regs.TRANSFORMERSTEMP.value] / 10
         
         # colis2, regs2 = self.parent.plcConnect2.readRegister()
 
@@ -59,10 +68,18 @@ class MainWindowInfoTab(QWidget):
         else:
             # self.parent.plcWriteObject1.writePlcData(0, regs)
             # self.parent.plcWriteObject1.writePlcData(20,regs2)
-            lcdListIndex = 0   
-            for i in Regs:
-                self.lcdList[lcdListIndex].display(float(regs[i.value]))
+            lcdListIndex = 0 
+            # self.lcdList[12].display(11.0)
+
+            # print("regs length : " + str(len(regs)))
+            # print("lcd length : " + str(len(self.lcdList)))
+
+            # print("regs 13 : " + str(regs[12]))
+            for i in range(0, len(self.lcdList)):
+                print("idx : " + str(i) + "value : " + str(regs[i]))
+                self.lcdList[i].display(float(regs[i]))
                 lcdListIndex = lcdListIndex + 1
+
 
               
 

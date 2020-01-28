@@ -19,7 +19,7 @@ class MainWindowOperatingTimeTab(QWidget):
         self.timeLableList = []
         self.initWidget()
         self.timer = QTimer(self)
-        self.timer.setInterval(5000)
+        self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.changeTimeLabel)
         
@@ -35,7 +35,8 @@ class MainWindowOperatingTimeTab(QWidget):
 
     def changeTimeLabel(self):
 
-        timeList = self.parent.plcConnect.readRegister(OperatingTime.TOTALMIN.value, OperatingTime.FILTERHOUR.value)
+        timeList = self.parent.plcConnect.readRegister(self.parent.machineStartReg + OperatingTime.TOTALMIN.value, 
+                                                        OperatingTime.FILTERHOUR.value - OperatingTime.TOTALMIN.value + 1)
 
         timeListIndex = 0
 

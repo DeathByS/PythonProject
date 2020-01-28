@@ -33,7 +33,7 @@ class MainWindowAlarmTab(QWidget):
         self.loadAlarmList()
         
         self.timer = QTimer(self)
-        self.timer.setInterval(5000)
+        self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.insertAlarmList)
 
@@ -49,9 +49,10 @@ class MainWindowAlarmTab(QWidget):
         timeText = time.strftime('%Y-%m-%d %H:%M')
 
         # 알람 요인, 알람 횟수
-        self.alarmCause = self.parent.plcConnect.readCoil(Alarms.PANELEMERGENCYSTOP.value, Alarms.ENDLIST.value)
-        self.alarmCount = self.parent.plcConnect.readRegister(Alarms.PANELEMERGENCYSTOP.value + Machine.ALARMCOUNTSTART.value, 
-                                                                Alarms.ENDLIST.value + Machine.ALARMCOUNTSTART.value)
+        self.alarmCause = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + Alarms.PANELEMERGENCYSTOP.value, 
+                                                            Alarms.ENDLIST.value)
+        self.alarmCount = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Alarms.PANELEMERGENCYSTOP.value
+                                                             + Machine.ALARMCOUNTSTART.value, Alarms.ENDLIST.value)
         # print(self.alarmCause)
         for i in Alarms:
             
@@ -85,6 +86,8 @@ class MainWindowAlarmTab(QWidget):
 
         if ret == QtWidgets.QMessageBox.Yes:
             print('yes' + str(number))
+            self.parent.plcConnect.writeCoils(Machine.EXCALARMSWITCHSTART.value, 1)
+
             if(number in range(Alarms.DRUMEXC.value, Alarms.FILTEREXC.value + 1, 1)):
                 print("SENDMSG")
                 switch = [False] * 6
@@ -92,8 +95,8 @@ class MainWindowAlarmTab(QWidget):
                 print("MSG : " + str(switch))
                 self.parent.plcConnect.writeCoils(Machine.EXCALARMSWITCHSTART.value, switch)
                 
-                switch[number - Alarms.DRUMEXC.value] = False
-                self.parent.plcConnect.writeCoils(Machine.EXCALARMSWITCHSTART.value, switch)
+                # switch[number - Alarms.DRUMEXC.value] = False
+                # self.parent.plcConnect.writeCoils(Machine.EXCALARMSWITCHSTART.value, switch)
 
 
         # msgbox.question(self, 'MessageBox title', 'Here comes message', msgboxYesBtn)
