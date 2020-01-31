@@ -6,12 +6,18 @@ import logging
 
 class FilterMsg(logging.Filter):
 
-    def filterMsg(self, recode):
+    def filter(self, recode):
 
+        # logging.debug("Hello")
         msg = recode.getMessage()
-        print("filter "+msg)
+        # print("filter "+msg)
 
-        return True
+        if 'transaction' in msg:
+            return True
+        elif 'Transaction' in msg:
+            return True
+        # else:
+            # return False
 
 
 FILE_MAX_BYTE = 1 * 1024 * 1024
@@ -29,20 +35,22 @@ LogHandler.suffix = "%Y%m%d"
 LogHandler.addFilter(FilterMsg())
 
 logging.basicConfig(format=FORMAT)
+# logging.root.addFilter(FilterMsg())
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(LogHandler)
-log.addFilter(FilterMsg())
-# print("msg : " + msg)
 
 
 
+# msg = log.callHandlers()
+# # text = msg.getMessage()
 
 UNIT = 0x1
 class SyncClient:
     def __init__(self):
         self.client = None
         self.connectIp = "kwtkorea.iptime.org"
+        
 
     def connectClient(self, connectIp="kwtkorea.iptime.org", port=502):
         self.connectIp = connectIp
@@ -83,7 +91,7 @@ class SyncClient:
         
         readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
         # print("rr.coil", readCoils.bits)
-
+        
         return readCoils.bits
 
     def readRegister(self, startBit=0, count =15):
@@ -121,7 +129,7 @@ if __name__ == "__main__":
     test.connectClient()
     holdingRegitsters = test.readRegister()
     coils = test.readCoil()
-    test.writeCoils()
-    test.closeClient()
+    # test.writeCoils()
+    # test.closeClient()
 
     print(coils, holdingRegitsters)

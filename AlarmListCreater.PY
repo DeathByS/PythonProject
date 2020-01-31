@@ -22,7 +22,7 @@ with open('AlarmList.csv', 'r', encoding='utf-8') as f:
 
 for i in Alarms:
     alarms[i.name] = alarmList[i.value]
-    # print(alarms[i.name][1])
+    print(alarms[i.name][1])
 
 # print(alarms)
 

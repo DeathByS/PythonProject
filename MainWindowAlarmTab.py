@@ -21,11 +21,22 @@ class MainWindowAlarmTab(QWidget):
         
         # MainWindow 폼의 위젯을 조작할 것이기 때문에 MainWindow를 parent로 받아 MainWindow의 위젯을 조작함
         self.parent = parent
+
         self.alarmList = {}
-        self.alarmCause = []
+        # 알람 요인
+        self.alarmCause = []  
+        # 알람 횟수
         self.alarmCount = []
         
-        
+        # 현장의 오류로 인한 알람이 게속 뜨는걸 방지하기 위한 것
+        self.alarmCheck = []
+
+        for i in range(0, Alarms.ENDLIST.value + 1):
+            self.alarmCheck.append(0)
+
+
+        print(self.alarmCheck)    
+
         self.parent.tableWidget.setColumnWidth(0,250)
         self.parent.tableWidget.setColumnWidth(1,500)
         self.parent.tableWidget.setColumnWidth(2,150)
@@ -41,7 +52,7 @@ class MainWindowAlarmTab(QWidget):
         with open('AlarmList.bin', 'rb') as f:
            self.alarmList = pickle.load(f)
 
-           print(self.alarmList[Alarms.PANELEMERGENCYSTOP.name])  
+        #    print(self.alarmList[Alarms.PANELEMERGENCYSTOP.name])  
 
     def insertAlarmList(self):
         # 알람 발생 시간
@@ -50,28 +61,30 @@ class MainWindowAlarmTab(QWidget):
 
         # 알람 요인, 알람 횟수
         self.alarmCause = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + Alarms.PANELEMERGENCYSTOP.value, 
-                                                            Alarms.ENDLIST.value)
+                                                            Alarms.ENDLIST.value + 1)
         self.alarmCount = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Alarms.PANELEMERGENCYSTOP.value
-                                                             + Machine.ALARMCOUNTSTART.value, Alarms.ENDLIST.value)
+                                                             + Machine.ALARMCOUNTSTART.value, Alarms.ENDLIST.value + 1)
         # print(self.alarmCause)
         for i in Alarms:
             
             if(self.alarmCause[i.value]):
-                
-                self.parent.tableWidget.insertRow(0)
-                item = []
-                item.append(QTableWidgetItem(timeText))
-                # 알람 발생 요인 item 추가 alarmList[1] = plc 주소, alarmList[0] = 알람 내용
-                alarmCauseText = "["+self.alarmList[i.name][1]+"]" + " " + self.alarmList[i.name][0]
-                item.append(QTableWidgetItem(alarmCauseText))
-                alarmCountText = str(self.alarmCount[i.value])
-                item.append(QTableWidgetItem(alarmCountText))
+                if(self.alarmCheck[i.value] == False):
+                    self.alarmCheck[i.value] = True
+                    self.parent.tableWidget.insertRow(0)
+                    item = []
+                    item.append(QTableWidgetItem(timeText))
+                    # 알람 발생 요인 item 추가 alarmList[1] = plc 주소, alarmList[0] = 알람 내용
+                    alarmCauseText = "["+self.alarmList[i.name][1]+"]" + " " + self.alarmList[i.name][0]
+                    item.append(QTableWidgetItem(alarmCauseText))
+                    alarmCountText = str(self.alarmCount[i.value])
+                    item.append(QTableWidgetItem(alarmCountText))
             
-                for j in range(0, self.parent.tableWidget.columnCount()):
+                    for j in range(self.parent.tableWidget.columnCount()):
                      self.parent.tableWidget.setItem(0, j, item[j])
                 
-                print(i)
-                self.showMessageBox(alarmCauseText, i.value)
+                    self.showMessageBox(alarmCauseText, i.value)
+            else:
+                self.alarmCheck[i.value] = False        
 
     def showMessageBox(self, text, number):
         msgbox = QtWidgets.QMessageBox(self)

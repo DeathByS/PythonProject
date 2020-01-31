@@ -89,8 +89,12 @@ class Alarms(enum.Enum):
     # 물탱크센서
     WTSENSOREXC                 = 41
     FILTEREXC                   = 42
-
-    ENDLIST                     = 43
+    DONTUSE1                    = 44
+    DONTUSE2                    = 45
+    DONTUSE3                    = 46
+    DONTUSE4                    = 47
+    # FULLTIMEON                  = 48
+    ENDLIST                     = 47
 
 
     
@@ -128,3 +132,10 @@ class OperatingTime(enum.Enum):
     WATERTANKHOUR               = 32
     FILTERMIN                   = 33
     FILTERHOUR                  = 34
+
+
+class Monitoring(enum.Enum):
+
+    NUMBEROFBUTTONS         =   4     
+    NUMBEROFLABELS          =   16
+    NUMBEROFDATA            =   4

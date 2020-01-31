@@ -3,14 +3,14 @@
 import sys
 import csv
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 from sync_Client import SyncClient 
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QTimer
-from enums import Coils, Machine, Regs
+from enums import Coils, Machine, Regs, Monitoring
 from MainWindow import MainWindow
  
 class MonitoringWindow(QtWidgets.QMainWindow):
@@ -24,9 +24,9 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         
         self.statusLabelList = []
         self.locationButtonList = []
-        self.label_1.setText("AAA")
 
         self.connectListDict = {}
+
         self.initConnectionList()
         self.initStatusLabel()
         self.initLocationButton()
@@ -35,7 +35,10 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
         self.changeStatusLabel()
 
-        
+        self.timer = QTimer(self)
+        self.timer.setInterval(10000)
+        self.timer.start()
+        self.timer.timeout.connect(self.changeStatusLabel)
         
 
     def initConnectionList(self):
@@ -60,29 +63,17 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
 
     def initStatusLabel(self):
-        self.statusLabelList.append(self.label_1)
-        self.statusLabelList.append(self.label_2)
-        self.statusLabelList.append(self.label_3)
-        self.statusLabelList.append(self.label_4)
-        self.statusLabelList.append(self.label_5)
-        self.statusLabelList.append(self.label_6)
-        self.statusLabelList.append(self.label_7)
-        self.statusLabelList.append(self.label_8)
-        self.statusLabelList.append(self.label_9)
-        self.statusLabelList.append(self.label_10)
-        self.statusLabelList.append(self.label_11)
-        self.statusLabelList.append(self.label_12)
-        self.statusLabelList.append(self.label_13)
-        self.statusLabelList.append(self.label_14)
-        self.statusLabelList.append(self.label_15)
-        self.statusLabelList.append(self.label_16)
-
+        
+        for i in range(1, Monitoring.NUMBEROFLABELS.value + 1):
+            # 오브젝트의 이름을 가지고 오브젝트 찾아 사용하는법.
+            labelName = "label_%d" % i
+            self.statusLabelList.append(self.findChild(QtWidgets.QLabel, labelName))
 
     def initLocationButton(self):
-        self.locationButtonList.append(self.pushButton_1)
-        self.locationButtonList.append(self.pushButton_2) 
-        self.locationButtonList.append(self.pushButton_3) 
-        self.locationButtonList.append(self.pushButton_4) 
+        for i in range(1, Monitoring.NUMBEROFBUTTONS.value + 1):
+            # 오브젝트의 이름을 가지고 오브젝트 찾아 사용하는법.
+            buttonName = "pushButton_%d" % i
+            self.locationButtonList.append(self.findChild(QtWidgets.QPushButton, buttonName))
 
         for i in self.locationButtonList:
             i.clicked.connect(lambda state, button=i : self.slotConnectButton(state, button))
@@ -101,25 +92,27 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
 
         
-        for j in range(0, 4): 
-            # print(f"index is {index}")
+        for j in range(4): 
+            
             location, machineStartReg, machineStartCoil = self.setLocation(self.locationButtonList[j].text())
             onoff = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.AUTOMATICSTART.value, 1)
             dcV = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCV.value, 1)
             dcA = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCA.value, 1)
             alarm = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.REMOTESTOP.value, 1)
-
+            
             dataList.append(onoff)
             dataList.append(dcV)
             dataList.append(dcA)
             dataList.append(alarm)
         
-        print(f"dataList is {dataList}")
+        
         
         index = 0
 
-        for i in range(0, 4):
+        for i in range(Monitoring.NUMBEROFDATA.value):
+            # index 0:onoff 1:DCV 2:DCA 3:ALARM
 
+            # 가동상태 라벨 on/off 색상 처리
             if dataList[index][0] is True:
                 onoff = 'On'
                 backgroundcolor = 'background-color:#84ff00;'
@@ -135,12 +128,15 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             index = index + 1
             for j in range(1, 3):
                 
-                print(f"index is {index}")
+               
                 self.statusLabelList[index].setFont(QFont('맑은 고딕', 14))   
 
                 text = str(dataList[index])
+                # 텍스트에 붙어 나오는 [ ] 제거
                 text = text[1:len(text)-1]
                 if j is 1:
+
+                    # plc에서 받은 전압값 / 10 해줘야 정상 전압으로 표시
                     data = int(text)
                     data = data / 10
                     text = str(data)
@@ -148,7 +144,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 self.statusLabelList[index].setText(text)
                 
                 index = index +  1   
-
+            # alarm 
             self.statusLabelList[index].setFont(QFont('맑은 고딕', 14))  
             self.statusLabelList[index].setText(str(dataList[index][0])) 
             index = index +  1   
@@ -162,6 +158,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
     # 버튼의 이름을 통해 현장과 현장의 A,B,C호기를 판별함
     def setLocation(self, location):
 
+        # 버튼 이름이 의정부_A 식으로 되어있음. _를 기준으로 접속 위치와 몇호기 인지를 판별할 수 있음.
         location = location.split("_")
 
         lo = location[0]
