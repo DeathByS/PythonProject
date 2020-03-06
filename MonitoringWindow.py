@@ -2,6 +2,7 @@
  
 import sys
 import csv
+import image_rc
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5 import uic
@@ -35,10 +36,11 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
         self.changeStatusLabel()
 
-        self.timer = QTimer(self)
+        self.timer = QTimer(self) 
         self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.changeStatusLabel)
+        # self.setFocusPolicy(Qt.Qt.Strong)
         
 
     def initConnectionList(self):
@@ -59,7 +61,10 @@ class MonitoringWindow(QtWidgets.QMainWindow):
     def initPlcConnect(self):
             # 딕셔너리의 키만 받아서 리스트 같이 사용
         for i in self.connectListDict.keys():
-            self.plcConnectDict[i] = (self.connect(self.connectListDict[i]))
+            try:
+                self.plcConnectDict[i] = (self.connect(self.connectListDict[i]))
+            except:
+                self.plcConnectDict[i] = False
 
 
     def initStatusLabel(self):
@@ -95,10 +100,21 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         for j in range(4): 
             
             location, machineStartReg, machineStartCoil = self.setLocation(self.locationButtonList[j].text())
-            onoff = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.AUTOMATICSTART.value, 1)
-            dcV = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCV.value, 1)
-            dcA = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCA.value, 1)
-            alarm = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.REMOTESTOP.value, 1)
+            
+            # 일단 연결이 안된걸 확인, 재연결 시도 후 연결 안되면 모든 데이터에 0을 삽입
+            try:
+                if(self.plcConnectDict[location] == False):
+                    self.plcConnectDict[location] = (self.connect(self.connectListDict[j])) 
+
+                onoff = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.AUTOMATICSTART.value, 1)
+                dcV = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCV.value, 1)
+                dcA = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCA.value, 1)
+                alarm = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.REMOTESTOP.value, 1)
+            except:
+                onoff = [0]
+                dcV = [0]
+                dcA = [0]
+                alarm = [0]
             
             dataList.append(onoff)
             dataList.append(dcV)
@@ -115,12 +131,12 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             # 가동상태 라벨 on/off 색상 처리
             if dataList[index][0] is True:
                 onoff = 'On'
-                backgroundcolor = 'background-color:#84ff00;'
+                backgroundcolor = 'color:#00e600;'
             else:
                 onoff = 'Off'
-                backgroundcolor = 'background-color:#ec2400;'
+                backgroundcolor = 'color:#ec2400;'
 
-            self.statusLabelList[index].setStyleSheet(backgroundcolor)
+            self.statusLabelList[index].setStyleSheet('background-image: url(:/image/label4.png); ' + backgroundcolor)
             self.statusLabelList[index].setFont(QFont('맑은 고딕', 14))
 
             self.statusLabelList[index].setText(onoff)  
@@ -165,10 +181,11 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         machineStartReg = 0
         machineStartCoil = 0
 
-        if len(location) == 1:
+        # 기계 대수가 1대라서 a,b,c 구분이 없고 오직 이름으로만 구성되어있을때 ex)서울
+        if len(location) == 1: 
             machineStartReg = Machine.FIRSTREG.value
             machineStartCoil = Machine.FIRSTCOIL.value
-
+        # A호기 ex)의정부_A
         elif location[1] == 'A':
             machineStartReg = Machine.FIRSTREG.value
             machineStartCoil = Machine.FIRSTCOIL.value
@@ -190,10 +207,12 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         # 현장과 현장의 몇호기를 연결할 것인가를 버튼 이름을 통해 판별
         location, machineStartReg, machineStartCoil = self.setLocation(button.text())
 
-        print(f"location {location} , machineStartCoil {machineStartCoil}, machineStartReg {machineStartReg}")
-        self.mainWindow = MainWindow()
+        # print(f"location {location} , machineStartCoil {machineStartCoil}, machineStartReg {machineStartReg}")
+
+        self.mainWindow = MainWindow(button.text())
         self.mainWindow.connect(self.connectListDict[location])
         self.mainWindow.setStartCoilandReg(machineStartCoil, machineStartReg)
+        # self.mainWindow.setMachineName()
         self.mainWindow.show()
 
     def closeEvent(self, QCloseEvent):

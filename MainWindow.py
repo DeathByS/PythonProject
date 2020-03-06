@@ -2,9 +2,9 @@
  
 import sys
 import csv
+import image_rc
 
-
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, Qt
 from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
@@ -14,10 +14,12 @@ from MainWindowInfoTab import MainWindowInfoTab
 from MainWindowStatusTab import MainWindowStatusTab
 from MainWindowAlarmTab import MainWindowAlarmTab
 from MainWindowOperatingTimeTab import MainWindowOperatingTimeTab
+from MainWindowAbnormalSignTab  import MainWindowAbnormalSignTab
+from MainWindowEmailSettingTab  import MainWindowEmailSettingTab
 
  
 class MainWindow(QtWidgets.QDialog):
-    def __init__(self):
+    def __init__(self, machineName =''):
         # QtWidgets.QDialog.__init__(self, parent)
         
         #         super().__init__() uic.loadUi('MainForm.ui', self)
@@ -28,12 +30,7 @@ class MainWindow(QtWidgets.QDialog):
         # self.ui.tabWidget.addTab(MainWindowTab1(), MainWindowTab1.__name__)
         # self.ui.tabWidget.addTab(MainWindowTab1(), MainWindowTab1.__name__)
        
-        # 메인윈도우에 실린 위젯을 조작하기 위해서, 메인윈도우를 부모로 보내어 다른 클래스에서 조작할 수 있게 만든다.
-        self.mainWindowInfoTab = MainWindowInfoTab(self)
-        self.mainWindowStatusTab = MainWindowStatusTab(self)
-        self.mainWindowAlarmTab = MainWindowAlarmTab(self)
-        self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
-        
+      
         # self.mainWindowAlarmTab.insertAlarmList()
         # MainWindowTab1.init_widget(self)
 
@@ -46,7 +43,18 @@ class MainWindow(QtWidgets.QDialog):
         self.machineStartReg = 0
         self.machineStartCoil = 0
 
+        # 기계의 이름
+        self.machineName = machineName
+
+        # 메인윈도우에 실린 위젯을 조작하기 위해서, 메인윈도우를 부모로 보내어 다른 클래스에서 조작할 수 있게 만든다.
+        self.mainWindowInfoTab = MainWindowInfoTab(self)
+        self.mainWindowStatusTab = MainWindowStatusTab(self)
+        self.mainWindowAlarmTab = MainWindowAlarmTab(self)
+        self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
+        self.mainWindowAbnormalSignTab = MainWindowAbnormalSignTab(self)
+        self.MainWindowEmailSettingTab = MainWindowEmailSettingTab(self)
         
+        self.setWindowTitle(machineName)       
 
     def connect(self, ip = "kwtkorea.iptime.org"):
         self.plcConnect.connectClient(ip ,502)
@@ -57,6 +65,20 @@ class MainWindow(QtWidgets.QDialog):
         self.machineStartCoil = coil
         self.machineStartReg = reg
 
+    def setMachineName(self, name):
+        self.machineName = name 
+        self.setWindowTitle(self.machineName)
+
+    def setNumberOfAlarm(self, count):
+        self.mainWindowInfoTab.numberOfAlarm = count    
+
+    def setNumberOfAbnormalSignAlarm(self, count):
+        self.mainWindowInfoTab.numberOfAbnormalSignAlarm = count
+
+    def insertAlarm(self, text):
+        self.mainWindowAlarmTab.insertAlarm(text)
+        self.mainWindowAlarmTab.showMessageBox(text)
+
 
     def closeEvent(self, QCloseEvent):
         print("Enter CloseEvent")
@@ -65,8 +87,8 @@ class MainWindow(QtWidgets.QDialog):
         QCloseEvent.accept()
 
 
-# if __name__ == '__main__':
-#     app = QtWidgets.QApplication(sys.argv)
-#     w = MainWindow()
-#     sys.exit(app.exec())
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    w = MainWindow()
+    sys.exit(app.exec())
    

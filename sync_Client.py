@@ -3,6 +3,7 @@ from pymodbus.exceptions import ConnectionException
 from logging import handlers
 import pymodbus
 import logging
+from time import *
 
 class FilterMsg(logging.Filter):
 
@@ -10,14 +11,16 @@ class FilterMsg(logging.Filter):
 
         # logging.debug("Hello")
         msg = recode.getMessage()
-        # print("filter "+msg)
-
-        if 'transaction' in msg:
+        time = recode.asctime
+        # print("filter " + time)
+        
+        if 'IDLE' in msg:
+            print('filter ' + msg)
             return True
-        elif 'Transaction' in msg:
+        elif 'TRANSACTION_COMPLETE' in msg:
             return True
-        # else:
-            # return False
+        
+        return False
 
 
 FILE_MAX_BYTE = 1 * 1024 * 1024
@@ -33,26 +36,28 @@ LogHandler.setFormatter(LogFormatter)
 
 LogHandler.suffix = "%Y%m%d"
 LogHandler.addFilter(FilterMsg())
+streamHander = logging.StreamHandler()
+streamHander.addFilter(FilterMsg())
 
 logging.basicConfig(format=FORMAT)
-# logging.root.addFilter(FilterMsg())
 log = logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(LogHandler)
+log.addHandler(streamHander)
 
 
 
-# msg = log.callHandlers()
-# # text = msg.getMessage()
+
+
 
 UNIT = 0x1
 class SyncClient:
     def __init__(self):
         self.client = None
-        self.connectIp = "kwtkorea.iptime.org"
+        self.connectIp = "kwtujb.iptime.org"
         
 
-    def connectClient(self, connectIp="kwtkorea.iptime.org", port=502):
+    def connectClient(self, connectIp="kwtpusan.iptime.org", port=502):
         self.connectIp = connectIp
 
         if self.client is None:
@@ -89,10 +94,15 @@ class SyncClient:
 
     def readCoil(self, startBit=0, endBit=26):
         
+        readCoils = None
+        
         readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
         # print("rr.coil", readCoils.bits)
         
-        return readCoils.bits
+        if(readCoils is not None):
+            return readCoils.bits
+        else:
+            return readCoils
 
     def readRegister(self, startBit=0, count =15):
 
@@ -107,6 +117,8 @@ class SyncClient:
         # rq = client.write_register(30, 10, unit=UNIT)
                 readHoldingRegs = self.client.read_holding_registers(startBit, count, unit=UNIT)
                 # print("rr.registers", readHoldingRegs.registers)
+
+                return readHoldingRegs.registers
             except:
                 print("read error")
                 return "read error", "read error"
@@ -117,7 +129,7 @@ class SyncClient:
         # ----------------------------------------------------------------------- #
         # self.client.close()
         # time.sleep(2)
-            return readHoldingRegs.registers
+           
         else:
             print("check connect")
             return 1
@@ -127,9 +139,32 @@ class SyncClient:
 if __name__ == "__main__":
     test = SyncClient()
     test.connectClient()
+    # while True:
     holdingRegitsters = test.readRegister()
-    coils = test.readCoil()
-    # test.writeCoils()
-    # test.closeClient()
+        # coils = test.readCoil()
+        # test.writeCoils()
+        # test.closeClient()
 
-    print(coils, holdingRegitsters)
+    print(holdingRegitsters)
+
+    holdingRegitsters = test.readRegister()
+        # coils = test.readCoil()
+        # test.writeCoils()
+        # test.closeClient()
+
+    print(holdingRegitsters)
+
+    holdingRegitsters = test.readRegister()
+        # coils = test.readCoil()
+        # test.writeCoils()
+        # test.closeClient()
+
+    print(holdingRegitsters)
+
+    holdingRegitsters = test.readRegister()
+        # coils = test.readCoil()
+        # test.writeCoils()
+        # test.closeClient()
+
+    print(holdingRegitsters)
+        # sleep(3)

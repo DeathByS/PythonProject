@@ -10,11 +10,15 @@ class Regs(enum.Enum):
     DCA                = 5
     DRUMCOLLINGWATER   = 6
     TRANSFORMERSTEMP   = 7
-    INPUT              = 8
-    OUTPUT             = 9
-    WATERRATE          = 10
-    LEFTBALANCE        = 11
-    RIGHTBALANCE       = 12
+    SCRTEMP            = 8
+    CAPACITY           = 9  
+    INPUT              = 10
+    OUTPUT             = 11
+    WATERRATE          = 12
+    LEFTBALANCE        = 13
+    RIGHTBALANCE       = 14
+    SLIPRINGTEMP       = 15
+    
     
 
 
@@ -97,6 +101,12 @@ class Alarms(enum.Enum):
     ENDLIST                     = 47
 
 
+class AbnormalSignAlarm(enum.Enum):
+
+    OUTOFTIME                   = 112
+    LEFTBALANCE                 = 113
+    RIGHTBALANCE                = 114
+    ENDLIST                     = 114
     
 
 
@@ -139,3 +149,7 @@ class Monitoring(enum.Enum):
     NUMBEROFBUTTONS         =   4     
     NUMBEROFLABELS          =   16
     NUMBEROFDATA            =   4
+
+class OpTimeTab(enum.Enum):
+
+    NUMBEROFLABELS          =   7
