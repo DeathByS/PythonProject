@@ -15,6 +15,7 @@ from datetime import datetime
 import time
 import pickle
 from SingletonInstance import GetDataFromDB
+from SingletonInstance import EmailSender
 
 
 class MainWindowAlarmTab(QWidget):
@@ -57,9 +58,14 @@ class MainWindowAlarmTab(QWidget):
         self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.insertAlarmList)
+        
+        self.timer2 = QTimer(self)
+        self.timer2.setInterval(1000 * 60 * 10)
+        self.timer2.start()
+        self.timer2.timeout.connect(self.sludgeOutCheck)
 
     def loadAlarmList(self):
-        with open('AlarmList.bin', 'rb') as f:
+        with open('data/AlarmList.bin', 'rb') as f:
            self.alarmList = pickle.load(f)
 
         #    print(self.alarmList[Alarms.PANELEMERGENCYSTOP.name])  
@@ -98,6 +104,7 @@ class MainWindowAlarmTab(QWidget):
                     self.alarmCheck[i.value] = False
                     self.numberOfAlarm -= 1
 
+            # 운전 현황 탭의 알람 표시용 
             self.parent.setNumberOfAlarm(self.numberOfAlarm)    
 
     # 다른 탭 ex)이상징후, 교체주기 에서 직접 알람을 추가할 때 사용 
@@ -155,4 +162,31 @@ class MainWindowAlarmTab(QWidget):
         # msgbox.question(self, 'MessageBox title', 'Here comes message', msgboxYesBtn)
 
 
+    def sludgeOutCheck(self):
+        
+        try:
+            sludgeCheck = self.parent.plcConnect.readCoil(144, 1)
+
+            if(sludgeCheck[0]):
+
+                emailSender = EmailSender.instance()
+                emailReciver = self.parent.lineEdit_sludgeOutEmail.text()
+
+                location = self.parent.machineName
+
+                subject = '%s 배출 슬러지 배차 알람 메일 입니다'%location
+                msg = '슬러지 량이 설정된 값을 초과하여 배출 알림 메일을 보냅니다.'
+                emailSender.emailSend(reciver=emailReciver,subject=subject, msg=msg)
+                Time = datetime.now()
+
+                with open("log/SludgeOutEmailSendLog.txt", "at", encoding='utf-8') as f:
+                    f.write(str(Time) + ' %s 슬러지 배출 알람 이메일 발송\n'%location)
+
+                self.parent.setNumberOfOfSludgeOutAlarm(1)
+
+                
+
+        except:
+            print('error : sludgeOut check part, MainWindowAlarm')
+            return 
 

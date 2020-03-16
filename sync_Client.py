@@ -5,45 +5,45 @@ import pymodbus
 import logging
 from time import *
 
-class FilterMsg(logging.Filter):
+# class FilterMsg(logging.Filter):
 
-    def filter(self, recode):
+#     def filter(self, recode):
 
-        # logging.debug("Hello")
-        msg = recode.getMessage()
-        time = recode.asctime
-        # print("filter " + time)
+#         # logging.debug("Hello")
+#         msg = recode.getMessage()
+#         time = recode.asctime
+#         # print("filter " + time)
         
-        if 'IDLE' in msg:
-            print('filter ' + msg)
-            return True
-        elif 'TRANSACTION_COMPLETE' in msg:
-            return True
+#         if 'IDLE' in msg:
+#             print('filter ' + msg)
+#             return True
+#         elif 'TRANSACTION_COMPLETE' in msg:
+#             return True
         
-        return False
+#         return False
 
 
-FILE_MAX_BYTE = 1 * 1024 * 1024
+# FILE_MAX_BYTE = 1 * 1024 * 1024
+# # FORMAT = ('%(asctime)-15s %(threadName)-15s '
+# #           '%(levelname)-8s %(module)-15s:%(lineno)-8s %(message)s')
 # FORMAT = ('%(asctime)-15s %(threadName)-15s '
-#           '%(levelname)-8s %(module)-15s:%(lineno)-8s %(message)s')
-FORMAT = ('%(asctime)-15s %(threadName)-15s '
-          '%(levelname)-8s %(message)s')
+#           '%(levelname)-8s %(message)s')
 
-LogFormatter = logging.Formatter('%(asctime)-15s %(threadName)-15s '
-          '%(levelname)-8s %(message)s')
-LogHandler = handlers.TimedRotatingFileHandler(filename='PLC.log', when='midnight', interval=1, encoding='utf-8')
-LogHandler.setFormatter(LogFormatter)
+# LogFormatter = logging.Formatter('%(asctime)-15s %(threadName)-15s '
+#           '%(levelname)-8s %(message)s')
+# LogHandler = handlers.TimedRotatingFileHandler(filename='log/PLC.log', when='midnight',backupCount=7, interval=1, encoding='utf-8')
+# LogHandler.setFormatter(LogFormatter)
 
-LogHandler.suffix = "%Y%m%d"
-LogHandler.addFilter(FilterMsg())
-streamHander = logging.StreamHandler()
-streamHander.addFilter(FilterMsg())
+# LogHandler.suffix = "%Y%m%d"
+# LogHandler.addFilter(FilterMsg())
+# streamHander = logging.StreamHandler()
+# streamHander.addFilter(FilterMsg())
 
-logging.basicConfig(format=FORMAT)
-log = logging.getLogger()
-log.setLevel(logging.DEBUG)
-log.addHandler(LogHandler)
-log.addHandler(streamHander)
+# logging.basicConfig(format=FORMAT)
+# log = logging.getLogger()
+# log.setLevel(logging.DEBUG)
+# log.addHandler(LogHandler)
+# log.addHandler(streamHander)
 
 
 

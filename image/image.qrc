@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/image">
+    <file>서울1호기.png</file>
     <file>Title2.png</file>
     <file>kwticon.png</file>
     <file>label6.png</file>

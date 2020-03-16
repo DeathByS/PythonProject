@@ -45,7 +45,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
     def initConnectionList(self):
     
-        with open('ConnectionList.csv', 'r', encoding='utf-8') as f:
+        with open('data/ConnectionList.csv', 'r', encoding='utf-8') as f:
             rdr = csv.reader(f)
             
             connList = [] 
@@ -115,6 +115,10 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 dcV = [0]
                 dcA = [0]
                 alarm = [0]
+
+            # dcA의 쓰레기값 처리
+            if(dcA[0] > 65000):
+                dcA[0] = 0     
             
             dataList.append(onoff)
             dataList.append(dcV)

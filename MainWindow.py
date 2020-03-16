@@ -16,6 +16,7 @@ from MainWindowAlarmTab import MainWindowAlarmTab
 from MainWindowOperatingTimeTab import MainWindowOperatingTimeTab
 from MainWindowAbnormalSignTab  import MainWindowAbnormalSignTab
 from MainWindowEmailSettingTab  import MainWindowEmailSettingTab
+from SludgeInOutCheck import SludgeInOutCheck
 
  
 class MainWindow(QtWidgets.QDialog):
@@ -53,6 +54,12 @@ class MainWindow(QtWidgets.QDialog):
         self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
         self.mainWindowAbnormalSignTab = MainWindowAbnormalSignTab(self)
         self.MainWindowEmailSettingTab = MainWindowEmailSettingTab(self)
+        self.SludgeInOutCheck = SludgeInOutCheck(self)
+
+        self.timer = QTimer(self)
+        self.timer.setInterval(5000)
+        self.timer.start()
+        self.timer.timeout.connect(self.SludgeInOutCheck.insertSludgeInOut)
         
         self.setWindowTitle(machineName)       
 
@@ -71,9 +78,12 @@ class MainWindow(QtWidgets.QDialog):
 
     def setNumberOfAlarm(self, count):
         self.mainWindowInfoTab.numberOfAlarm = count    
-
     def setNumberOfAbnormalSignAlarm(self, count):
-        self.mainWindowInfoTab.numberOfAbnormalSignAlarm = count
+        self.mainWindowInfoTab.numberOfAbnormalSignAlarm += count
+    def setNumberOfPartChangeAlarm(self, count):
+        self.mainWindowInfoTab.numberOfPartChangeAlarm += count
+    def setNumberOfOfSludgeOutAlarm(self, count):
+        self.mainWindowInfoTab.numberOfSludgeOutAlarm += count            
 
     def insertAlarm(self, text):
         self.mainWindowAlarmTab.insertAlarm(text)

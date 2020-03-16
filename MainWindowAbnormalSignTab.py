@@ -60,7 +60,7 @@ class MainWindowAbnormalSignTab(QWidget):
         self.timer.timeout.connect(self.insertAlarmList)
 
     def loadAlarmList(self):
-        with open('AbnormalSign.txt', 'r', encoding='utf-8') as f:
+        with open('data/AbnormalSign.txt', 'r', encoding='utf-8') as f:
            self.alarmList = f.readlines()
 
 
@@ -74,12 +74,15 @@ class MainWindowAbnormalSignTab(QWidget):
         timeText = currentTime.strftime('%Y-%m-%d %H:%M')
         
         # 알람 요인, 알람 횟수
-        
-        self.alarmCause = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + AbnormalSignAlarm.OUTOFTIME.value, 
+        try:
+            self.alarmCause = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + AbnormalSignAlarm.OUTOFTIME.value, 
                                                             AbnormalSignAlarm.ENDLIST.value - AbnormalSignAlarm.OUTOFTIME.value + 1)
         # self.alarmCount = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Alarms.PANELEMERGENCYSTOP.value
         #                                                      + Machine.ALARMCOUNTSTART.value, Alarms.ENDLIST.value + 1)
-
+        except:
+            print('error abnomalSign')
+            return
+        location = self.parent.machineName
         print('Abnormal')
         print(self.alarmCause)
         
@@ -95,13 +98,18 @@ class MainWindowAbnormalSignTab(QWidget):
                
                     self.showMessageBox(alarmCauseText, i)
 
-                    self.numberOfAlarm += 1
+                    alarmtime = datetime.now()
+                    with open("log/AbnormalSignAlarmLog.txt", "at", encoding='utf-8') as f:
+                        f.write(str(alarmtime) + ' %s %s\n'%(location, alarmCauseText))
+
+                    # self.numberOfAlarm += 1
+                    self.parent.setNumberOfAbnormalSignAlarm(1)
             else:
                 if(self.alarmCheck[i] == True):
                     self.alarmCheck[i] = False
-                    self.numberOfAlarm -= 1
+                    # self.numberOfAlarm -= 1
 
-            self.parent.setNumberOfAbnormalSignAlarm(self.numberOfAlarm)    
+               
 
     # 다른 탭 ex)이상징후, 교체주기 에서 직접 알람을 추가할 때 사용 
     def insertAlarm(self, text='', alarmTime ='', alarmCountText =''):

@@ -19,6 +19,8 @@ class MainWindowInfoTab(QWidget):
         self.lcdList = []
         self.numberOfAlarm = 0
         self.numberOfAbnormalSignAlarm = 0
+        self.numberOfSludgeOutAlarm = 0
+        self.numberOfPartChangeAlarm = 0
 
         self.initWidget()
 
@@ -105,8 +107,8 @@ class MainWindowInfoTab(QWidget):
             self.lcdList[12].display(float(regs[Regs.LEFTBALANCE.value]))
             self.lcdList[13].display(float(regs[Regs.RIGHTBALANCE.value]))
             self.lcdList[14].display(float(self.numberOfAlarm))
-            self.lcdList[15].display(float(0.0))
-            self.lcdList[16].display(float(0.0))
+            self.lcdList[15].display(float(self.numberOfSludgeOutAlarm))
+            self.lcdList[16].display(float(self.numberOfPartChangeAlarm))
             self.lcdList[17].display(float(self.numberOfAbnormalSignAlarm))
             
 
