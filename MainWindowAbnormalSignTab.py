@@ -10,8 +10,8 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtCore import QTimer
 from enums import Regs
-from enums import Alarms, Machine, AbnormalSignAlarm
-from datetime import datetime
+from enums import Alarms, Machine, AbnormalSignAlarm, OptimizerData
+import datetime
 from SingletonInstance import GetDataFromDB
 import time
 
@@ -31,7 +31,7 @@ class MainWindowAbnormalSignTab(QWidget):
         self.alarmCount = []
         
         # 현장의 오류로 인한 알람이 게속 뜨는걸 방지하기 위한 것
-        self.alarmCheck = []
+        self.alarmCheck = [False] * 5 
 
         for i in range(0, AbnormalSignAlarm.ENDLIST.value + 1):
             self.alarmCheck.append(0)
@@ -49,13 +49,14 @@ class MainWindowAbnormalSignTab(QWidget):
         alarmData = GetDataFromDB.instance().getDataAll('AbnormalSignData', self.parent.machineName)
 
         for i in alarmData:
-            alarmTime = datetime.strptime(i['timeData'], '%Y-%m-%dT%H:%M:%S.%f')
+            alarmTime = datetime.datetime.strptime(i['timeData'], '%Y-%m-%dT%H:%M:%S.%f')
             alarmTime = alarmTime.strftime('%Y-%m-%d %H:%M')
             self.insertAlarm(i['alarm'], str(alarmTime))
 
+        self.calcBaseData()
         
         self.timer = QTimer(self)
-        self.timer.setInterval(10000)
+        self.timer.setInterval(1000 * 10)
         self.timer.start()
         self.timer.timeout.connect(self.insertAlarmList)
 
@@ -67,28 +68,99 @@ class MainWindowAbnormalSignTab(QWidget):
         print('alarmList')
         print(self.alarmList)  
 
+    def calcBaseData(self):
+
+        getData = GetDataFromDB.instance()
+
+        current = datetime.datetime.now()
+        ago = current - datetime.timedelta(days=3)
+        # ago = current - datetime.timedelta(hours=1)
+        baseLeftBalance = 0
+        baseRightBalance = 0
+        baseCoolingWaterTemp = 0
+        baseTransformersTemp = 0
+
+
+
+
+        # try:
+
+        data = getData.getDataInRange('InfoData','timeData', str(ago), str(current),self.parent.machineName)
+        length = len(data)
+        # dcData = getData.getDataInRange('DCData','timeData', str(ago), str(current),self.parent.machineName)
+
+        for i in data:
+
+            baseLeftBalance += i['leftBalance']
+            baseRightBalance += i['rightBalance']
+            baseCoolingWaterTemp += i['drumcolingWater']
+            baseTransformersTemp += i['transformersTemp']
+            
+        print('baseData %f %f %f %f'%(baseLeftBalance/length,baseRightBalance/length,baseCoolingWaterTemp/length ,baseTransformersTemp/length))    
+
+        # 사행 횟수 이상
+        self.alarmCause.append((baseLeftBalance /length) * 1.5)
+        self.alarmCause.append((baseRightBalance /length) * 1.5)
+
+        # 온도 초과 이상
+        self.alarmCause.append((baseCoolingWaterTemp /length + 30) * 1.2)
+        self.alarmCause.append((baseTransformersTemp /length + 30) * 1.2)
+        
+        # 고형물화수율 데이터 저장용으로 리스트 한 개 더 늘려놓음
+        self.alarmCause.append(0)
+        
+        
+        # except:
+            # print('error')
+
+
     # 실시간으로 발생하고 있는 알람을 리스트에 추가함
     def insertAlarmList(self):
         
-        currentTime = datetime.now()
+        currentTime = datetime.datetime.now()
         timeText = currentTime.strftime('%Y-%m-%d %H:%M')
-        
-        # 알람 요인, 알람 횟수
-        try:
-            self.alarmCause = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + AbnormalSignAlarm.OUTOFTIME.value, 
-                                                            AbnormalSignAlarm.ENDLIST.value - AbnormalSignAlarm.OUTOFTIME.value + 1)
-        # self.alarmCount = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Alarms.PANELEMERGENCYSTOP.value
-        #                                                      + Machine.ALARMCOUNTSTART.value, Alarms.ENDLIST.value + 1)
-        except:
-            print('error abnomalSign')
-            return
         location = self.parent.machineName
-        print('Abnormal')
-        print(self.alarmCause)
         
-        for i in range(0, AbnormalSignAlarm.ENDLIST.value - AbnormalSignAlarm.OUTOFTIME.value + 1) :
-            
-            if(self.alarmCause[i]):
+        # 고형물회수율 계산용 데이터
+        optimizeData = self.parent.plcConnect.readRegister(self.parent.machineStartReg + 1400, 13)
+
+        print('optimizeData')
+        print(optimizeData)
+
+
+        # 
+        data = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Regs.DRUMFRQ.value, 
+                                                        Regs.SLIPRINGTEMP.value + 1)
+
+        currentData = []
+        currentData.append(data[Regs.LEFTBALANCE.value])
+        currentData.append(data[Regs.RIGHTBALANCE.value])
+        currentData.append(data[Regs.DRUMCOLLINGWATER.value] / 10)
+        currentData.append(data[Regs.TRANSFORMERSTEMP.value]/ 10)
+        currentData.append(0.92)
+
+        print('CurrentData')
+        print(currentData)
+
+
+        # 고형물회수율
+        try:
+            solidsCaptureRate = (
+            (
+                (optimizeData[OptimizerData.AVGSLUDGEOUTPUT.value] / optimizeData[OptimizerData.AVGSLUDGEINPUT.value])) /
+                ((1 - (optimizeData[OptimizerData.AVGINPUTWATERRATE.value] /100)) / (1 - (optimizeData[OptimizerData.AVGOUTPUTWATERRATE.value])/100))
+            )
+        except ZeroDivisionError:
+            solidsCaptureRate = 0.0
+        
+        self.alarmCause[len(self.alarmCause) -1] = solidsCaptureRate
+
+        print('alarmCause')
+        print(self.alarmCause)
+
+        for i in range(0, len(self.alarmCause)):
+
+            if(currentData[i] > self.alarmCause[i]):    
                 if(self.alarmCheck[i] == False):
                     self.alarmCheck[i] = True
 
@@ -98,7 +170,7 @@ class MainWindowAbnormalSignTab(QWidget):
                
                     self.showMessageBox(alarmCauseText, i)
 
-                    alarmtime = datetime.now()
+                    alarmtime = datetime.datetime.now()
                     with open("log/AbnormalSignAlarmLog.txt", "at", encoding='utf-8') as f:
                         f.write(str(alarmtime) + ' %s %s\n'%(location, alarmCauseText))
 
@@ -107,7 +179,14 @@ class MainWindowAbnormalSignTab(QWidget):
             else:
                 if(self.alarmCheck[i] == True):
                     self.alarmCheck[i] = False
-                    # self.numberOfAlarm -= 1
+            
+
+        
+            
+         
+        # with open("log/AbnormalSignAlarmLog.txt", "at", encoding='utf-8') as f:
+        #     f.write(str(currentTime) + ' %s %s\n'%(location, alarmCauseText))
+
 
                
 
@@ -115,7 +194,7 @@ class MainWindowAbnormalSignTab(QWidget):
     def insertAlarm(self, text='', alarmTime ='', alarmCountText =''):
         
         if(alarmTime == ''):
-            currentTime = datetime.now()
+            currentTime = datetime.datetime.now()
             timeText = currentTime.strftime('%Y-%m-%d %H:%M')
         else:
             timeText = alarmTime    

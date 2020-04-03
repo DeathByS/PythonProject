@@ -60,7 +60,7 @@ class MainWindowAlarmTab(QWidget):
         self.timer.timeout.connect(self.insertAlarmList)
         
         self.timer2 = QTimer(self)
-        self.timer2.setInterval(1000 * 60 * 10)
+        self.timer2.setInterval(1000 * 60 * 1)
         self.timer2.start()
         self.timer2.timeout.connect(self.sludgeOutCheck)
 
@@ -165,9 +165,15 @@ class MainWindowAlarmTab(QWidget):
     def sludgeOutCheck(self):
         
         try:
-            sludgeCheck = self.parent.plcConnect.readCoil(144, 1)
+            # coil 144 = 배출 슬러지량 초과 시 활성화 되는 reg
+            sludgeCheck = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + 144, 1)
+
+           
 
             if(sludgeCheck[0]):
+
+                # coil 146 = 메일 중복 발송을 막기 위해 사용
+                self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 146, [1] * 1)
 
                 emailSender = EmailSender.instance()
                 emailReciver = self.parent.lineEdit_sludgeOutEmail.text()

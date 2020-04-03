@@ -119,8 +119,13 @@ class MainWindowOperatingTimeTab(QWidget):
             # print('colIdx : %d'%self.colIndex)
 
     def changeTimeLabel(self):
-        timeList = self.parent.plcConnect.readRegister(self.parent.machineStartReg + OperatingTime.TOTALMIN.value, 
+
+        try:
+            timeList = self.parent.plcConnect.readRegister(self.parent.machineStartReg + OperatingTime.TOTALMIN.value, 
                                                         OperatingTime.FILTERHOUR.value - OperatingTime.TOTALMIN.value + 1)
+        except:
+            print('error changeTime')
+            return 'error OperatingTimeTab changeTimeLabel'
 
         timeListIndex = 0
 

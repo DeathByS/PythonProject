@@ -20,7 +20,7 @@ from SludgeInOutCheck import SludgeInOutCheck
 
  
 class MainWindow(QtWidgets.QDialog):
-    def __init__(self, machineName =''):
+    def __init__(self, machineName ='', location = 'kwtkorea.iptime.org', startReg =0, StartCoil= 0):
         # QtWidgets.QDialog.__init__(self, parent)
         
         #         super().__init__() uic.loadUi('MainForm.ui', self)
@@ -37,12 +37,13 @@ class MainWindow(QtWidgets.QDialog):
 
         # plc 와 연결하여 plc Data를 받아오는 객체
         self.plcConnect = SyncClient()
+        self.plcConnect.connectClient(location)
         self.ip = None
         
         # 현장의 기계 A,B,C호기의 시작 주소를 나타내고, 각 탭에서 시작 주소를 통해 A,B,C호기의 데이터를 출력
 
-        self.machineStartReg = 0
-        self.machineStartCoil = 0
+        self.machineStartReg = startReg
+        self.machineStartCoil = StartCoil
 
         # 기계의 이름
         self.machineName = machineName
@@ -56,8 +57,9 @@ class MainWindow(QtWidgets.QDialog):
         self.MainWindowEmailSettingTab = MainWindowEmailSettingTab(self)
         self.SludgeInOutCheck = SludgeInOutCheck(self)
 
+
         self.timer = QTimer(self)
-        self.timer.setInterval(5000)
+        self.timer.setInterval(1000 * 5)
         self.timer.start()
         self.timer.timeout.connect(self.SludgeInOutCheck.insertSludgeInOut)
         

@@ -4,7 +4,7 @@ class Regs(enum.Enum):
     
     DRUMFRQ            = 0
     PRESSROLLFRQ       = 1
-    SLUDEGSUPPLYFRQ    = 2
+    SLUDEGSUPPLYFRQ    = 2 
     SLUDEGSPREADFRQ    = 3
     DCV                = 4
     DCA                = 5
@@ -153,3 +153,20 @@ class Monitoring(enum.Enum):
 class OpTimeTab(enum.Enum):
 
     NUMBEROFLABELS          =   7
+
+
+class OptimizerData(enum.Enum):
+
+    AVGINPUTWATERRATE       =   0
+    AVGOUTPUTWATERRATE      =   2
+    AVGSLUDGEINPUT          =   4
+    AVGSLUDGEOUTPUT         =   6
+    AVGDCA                  =   8
+    BASEINPUTWATERRATE      =   1
+    BASEOUTPUTWATERRATE     =   3
+    BASESLUDGEINPUT         =   5
+    BASESLUDGEOUTPUT        =   7
+    BASEDCA                 =   9
+    BASEDCV                 =   10
+    BASEDRUMFRQ             =   11
+    BASEPUSSERFRQ           =   12

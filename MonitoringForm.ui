@@ -1337,6 +1337,7 @@ color: rgb(0, 0, 0);</string>
  </widget>
  <resources>
   <include location="image/image.qrc"/>
+  <include location="../../.designer/backup/image/image.qrc"/>
  </resources>
  <connections/>
 </ui>

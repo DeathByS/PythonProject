@@ -94,43 +94,53 @@ import sys
 
 # print(oneHourago)
 
-import requests
+# import requests
 
-def getData():
+# def getData():
 
-    urlcompare = 'http://kwtkorea.iptime.org:8080/OperatingData/?opName=종동축 베어링'
-    url = 'http://kwtkorea.iptime.org:8080/OperatingData/'
+#     urlcompare = 'http://kwtkorea.iptime.org:8080/OperatingData/?opName=종동축 베어링'
+#     url = 'http://kwtkorea.iptime.org:8080/OperatingData/'
 
-    response = requests.get(url=url)
+#     response = requests.get(url=url)
 
-    print(response.json()[0]['url'].split('/')[-2])
+#     print(response.json()[0]['url'].split('/')[-2])
 
-    print(len(response.json()))
+#     print(len(response.json()))
 
-    if len(response.json()) == 0:
+#     if len(response.json()) == 0:
        
-        data = {}
-        data['machineName'] = '의정부_B'
-        data['opName'] = '종동축 베어링' 
+#         data = {}
+#         data['machineName'] = '의정부_B'
+#         data['opName'] = '종동축 베어링' 
 
-        response = requests.post(url=url, data = data)
+#         response = requests.post(url=url, data = data)
 
-        print(response)
-    else:
-        url = response.json()[0]['url']
+#         print(response)
+#     else:
+#         url = response.json()[0]['url']
 
-        data = {}
-        data['machineName'] = '의정부_C'
-        data['opName'] = '주동축 베어링'
+#         data = {}
+#         data['machineName'] = '의정부_C'
+#         data['opName'] = '주동축 베어링'
         
-        response = requests.put(url=url, data = data)
+#         response = requests.put(url=url, data = data)
 
-        print(response)
+#         print(response)
+
+#     return 0
+
+from sync_Client import SyncClient
+
+def test():
+    plc = SyncClient()
+
+    for i in range(0, 10):
+        connect = plc.connectClient(connectIp='kwtujb.iptime.org')
+
+        print(connect)
 
     return 0
 
-
-
 if __name__ == '__main__':
-    w = getData()
+    w = test()
     sys.exit(w)

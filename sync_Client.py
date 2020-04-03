@@ -54,26 +54,30 @@ UNIT = 0x1
 class SyncClient:
     def __init__(self):
         self.client = None
-        self.connectIp = "kwtujb.iptime.org"
+        self.connectIp = "kwtkorea.iptime.org"
         
 
-    def connectClient(self, connectIp="kwtpusan.iptime.org", port=502):
+    def connectClient(self, connectIp="kwtkorea.iptime.org", port=502):
         self.connectIp = connectIp
-
+        print(self.connectIp)
         if self.client is None:
             
             try:
-             self.client = ModbusClient(self.connectIp, port) 
-             if self.client.connect() is None:
-                 print("self.client")
-                 return "error"
-            except pymodbus.exceptions.ConnectionException: 
-             print("error")
-             return "error"
+                self.client = ModbusClient(self.connectIp, port) 
+                print(self.client)
+                if self.client.connect():
+                    print("self.client")
+                    return "error"
+                else:
+                    print("after connect", self.client)
+                    return self.client    
+            except:
+                print("error")
+                return "error"
         
-        print("after connect", self.client)
+       
 
-        return self.client
+        
 
     def closeClient(self):
         if self.client is not None:
@@ -121,7 +125,7 @@ class SyncClient:
                 return readHoldingRegs.registers
             except:
                 print("read error")
-                return "read error", "read error"
+                return "read error"
         # assert(not rq.isError())     # test that we are not an error
         # print("rr.registers", rr.registers)
         # ----------------------------------------------------------------------- #
@@ -138,7 +142,7 @@ class SyncClient:
 # 코드가 인터프리터에 의해 직접 실행 될 때 실행되는 부분
 if __name__ == "__main__":
     test = SyncClient()
-    test.connectClient()
+    test.connectClient(connectIp='kwtujb.iptime.org')
     # while True:
     holdingRegitsters = test.readRegister()
         # coils = test.readCoil()
@@ -147,12 +151,12 @@ if __name__ == "__main__":
 
     print(holdingRegitsters)
 
-    holdingRegitsters = test.readRegister()
+    coils = test.readCoil()
         # coils = test.readCoil()
         # test.writeCoils()
         # test.closeClient()
 
-    print(holdingRegitsters)
+    print(coils)
 
     holdingRegitsters = test.readRegister()
         # coils = test.readCoil()

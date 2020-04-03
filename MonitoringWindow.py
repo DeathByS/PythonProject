@@ -11,8 +11,9 @@ from PyQt5.QtCore import QModelIndex
 from sync_Client import SyncClient 
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QTimer
-from enums import Coils, Machine, Regs, Monitoring
+from enums import Coils, Machine, Regs, Monitoring, OptimizerData
 from MainWindow import MainWindow
+from datetime import datetime
  
 class MonitoringWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -40,7 +41,15 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         self.timer.setInterval(10000)
         self.timer.start()
         self.timer.timeout.connect(self.changeStatusLabel)
+
+        self.timer2 = QTimer(self)
+        # 30분 정도에 한번씩 운전상황 업데이트 시간 체크하여 새벽 12시 이후에 운전상황 업데이트
+        self.timer2.setInterval(1000 * 60  * 30)
+        self.timer2.start()
+        self.timer2.timeout.connect(self.optimizeStatus)
         # self.setFocusPolicy(Qt.Qt.Strong)
+
+        
         
 
     def initConnectionList(self):
@@ -90,35 +99,40 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         return plcConnect
 
     def changeStatusLabel(self):
-        print("changes")
+        # print("changes")
         
 
         dataList = []
 
 
         
-        for j in range(4): 
+        for j in range(len(self.locationButtonList)): 
             
             location, machineStartReg, machineStartCoil = self.setLocation(self.locationButtonList[j].text())
             
             # 일단 연결이 안된걸 확인, 재연결 시도 후 연결 안되면 모든 데이터에 0을 삽입
             try:
-                if(self.plcConnectDict[location] == False):
-                    self.plcConnectDict[location] = (self.connect(self.connectListDict[j])) 
+                # if(self.plcConnectDict[location] == False):
+                #     print('c연결시도')
+                #     self.plcConnectDict[location] = (self.connect(self.connectListDict[j])) 
 
+                
                 onoff = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.AUTOMATICSTART.value, 1)
                 dcV = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCV.value, 1)
                 dcA = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCA.value, 1)
                 alarm = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.REMOTESTOP.value, 1)
+                
+                # dcA의 쓰레기값 처리
+                if(dcA[0] > 65000):
+                    dcA[0] = 0     
             except:
+                print('error Changelabel')
                 onoff = [0]
                 dcV = [0]
                 dcA = [0]
                 alarm = [0]
-
-            # dcA의 쓰레기값 처리
-            if(dcA[0] > 65000):
-                dcA[0] = 0     
+                
+          
             
             dataList.append(onoff)
             dataList.append(dcV)
@@ -154,7 +168,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 text = str(dataList[index])
                 # 텍스트에 붙어 나오는 [ ] 제거
                 text = text[1:len(text)-1]
-                if j is 1:
+                if (j == 1):
 
                     # plc에서 받은 전압값 / 10 해줘야 정상 전압으로 표시
                     data = int(text)
@@ -171,8 +185,8 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             
             # print(f"index is {index}")    
                 
-
             
+        # self.optimizeStatus()     
             
     
     # 버튼의 이름을 통해 현장과 현장의 A,B,C호기를 판별함
@@ -213,9 +227,9 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
         # print(f"location {location} , machineStartCoil {machineStartCoil}, machineStartReg {machineStartReg}")
 
-        self.mainWindow = MainWindow(button.text())
-        self.mainWindow.connect(self.connectListDict[location])
-        self.mainWindow.setStartCoilandReg(machineStartCoil, machineStartReg)
+        self.mainWindow = MainWindow(button.text(), self.connectListDict[location], machineStartReg, machineStartCoil)
+        # self.mainWindow.connect(self.connectListDict[location])
+        # self.mainWindow.setStartCoilandReg(machineStartCoil, machineStartReg)
         # self.mainWindow.setMachineName()
         self.mainWindow.show()
 
@@ -224,6 +238,60 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         # self.plcConnect.closeClient()
         self.deleteLater()
         QCloseEvent.accept()
+
+
+    def optimizeStatus(self):
+        # 정해진 시간에 맞춰 운전 조건을 업데이트 해주는 기능.
+        for i in range(len(self.locationButtonList)): 
+            
+            location, machineStartReg, machineStartCoil = self.setLocation(self.locationButtonList[i].text())
+
+            # plc의 시간을 가져와서 쓴다. 시작번지 500  # 시간 = 초 분 시 일 월 순
+            time = self.plcConnectDict[location].readRegister(machineStartReg + 500,5)
+            # print('time ' + self.locationButtonList[i].text())
+            print(time)
+            
+            # 새벽 12시 기준으로 운전상황을 업데이트 할것이다.
+            if(time[2] != 0):
+                return
+            
+            # 알고리즘 계산시 사용할 변수들 시작번지 1400
+            optimizeData = self.plcConnectDict[location].readRegister(machineStartReg + 1400, 13)
+            # print('time ' + self.locationButtonList[i].text())
+            print(optimizeData)
+            
+            # 알고리즘 식을 통해 조정값 산출
+
+            try:
+                dcV =   (
+                        ((1 - (1 - optimizeData[OptimizerData.BASEINPUTWATERRATE.value]/100) / (1 - optimizeData[OptimizerData.BASEOUTPUTWATERRATE.value]/100))/ 
+                        (1 - (1 - optimizeData[OptimizerData.AVGINPUTWATERRATE.value] /100) / (1 - optimizeData[OptimizerData.AVGOUTPUTWATERRATE.value] /100)))*
+                        (optimizeData[OptimizerData.AVGSLUDGEINPUT.value]/ optimizeData[OptimizerData.BASESLUDGEINPUT.value]) * optimizeData[OptimizerData.BASEDCV.value]
+                        )
+
+                drumFrq = optimizeData[OptimizerData.BASEDRUMFRQ.value] *  (optimizeData[OptimizerData.AVGSLUDGEINPUT.value]/ optimizeData[OptimizerData.BASESLUDGEINPUT.value])
+
+                pusherFrq = optimizeData[OptimizerData.BASEPUSSERFRQ.value] * (drumFrq / optimizeData[OptimizerData.BASEDRUMFRQ.value])        
+
+                print('Optimize Data dcV %f DrumFrq %f pusherFrq %f'%(dcV, drumFrq, pusherFrq))
+
+                data = []
+                data.append(int(dcV))
+                data.append(int(drumFrq))
+                data.append(int(pusherFrq))
+
+                starttime = datetime.now()
+                self.plcConnectDict[location].writeRegisters(machineStartReg + 250, data)
+
+                with open("log/OptimizeStatusChangeLog.txt", "a", encoding='utf-8') as f:    
+                    f.write(str(starttime) + ' %s 운전 조건 변경 전압 %d 드럼속도 %d 푸셔속도 %d'%(self.locationButtonList[i].text()
+                    ,int(dcV), int(drumFrq), int(pusherFrq)))
+
+            except:
+                # print('zero division Error')
+                return 'error'
+
+           
 
 
 if __name__ == '__main__':

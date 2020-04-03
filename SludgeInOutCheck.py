@@ -1,5 +1,6 @@
 from enums import Regs, Machine
 from datetime import datetime
+from PyQt5.QtCore import QTimer
 import time
 import requests
 
@@ -13,6 +14,8 @@ class SludgeInOutCheck():
         self.receiveTime = []
 
         self.url = 'http://kwtkorea.iptime.org:8080/SludgeInOutData/'
+
+       
 
     def insertSludgeInOut(self):
         

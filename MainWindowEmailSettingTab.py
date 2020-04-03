@@ -9,6 +9,7 @@ from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui  import QRegExpValidator
 from enums import Regs, Machine
 import time
+from datetime import datetime
 import requests
 
 class MainWindowEmailSettingTab(QWidget):
@@ -44,7 +45,8 @@ class MainWindowEmailSettingTab(QWidget):
 
         self.parent.pushButton_save.clicked.connect(lambda state, button=self.parent.pushButton_save : self.saveButtonClick(state, button))
         self.parent.pushButton_out.clicked.connect(lambda state, button=self.parent.pushButton_out : self.outButtonClick(state, button))
-
+        
+       
         try:
             url = 'http://kwtkorea.iptime.org:8080/EmailData/?machineName=%s'%self.parent.machineName
             response = requests.get(url=url)
@@ -58,13 +60,16 @@ class MainWindowEmailSettingTab(QWidget):
             pass
 
 
-        # try:
-        value = self.parent.plcConnect.readRegister(320, 5)
-        print('value = '+ str(value))
-        self.parent.lineEdit_sludgeOut.setText(str(value))
-        # except:
-        #     print('error sludgeoutReg')
-        #     pass
+        try:
+             # reg 320 = 배출 슬러지 무게 설정
+            value = self.parent.plcConnect.readRegister(self.parent.machineStartReg + 320, 1)
+            print(value[0])
+            self.parent.lineEdit_sludgeOut.setText(str(value[0]))
+
+       
+        except:
+            print('error sludgeoutReg')
+            pass
 
 
     # def setSludgeOut(self):
@@ -107,7 +112,9 @@ class MainWindowEmailSettingTab(QWidget):
             outValue = int(self.parent.lineEdit_sludgeOut.text())
             print('outValue = %d'%outValue)
             
-            self.parent.plcConnect.writeRegisters(320, [outValue] * 5)
+            self.parent.plcConnect.writeRegisters(self.parent.machineStartReg + 320, [outValue] * 1)
+            # value = self.parent.plcConnect.readRegister(self.parent.machineStartReg + 320, 1)
+            # print(value)
         except:
             return('error setSludgeOut MainWindowEmailSetting')    
 
@@ -115,10 +122,16 @@ class MainWindowEmailSettingTab(QWidget):
     @pyqtSlot()
     def outButtonClick(self, state, button):
         try:
-            self.parent.plcConnect.writeCoils(145, [1] *1)
-            self.parent.plcConnect.writeCoils(145, [0] *1)
+            # coil 145 = 배출량 초기화용 스위치 변수
+            self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 145, [1] *1)
+            self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 145, [0] *1)
+            location = self.parent.machineName
+            starttime = datetime.now()
+            with open("log/SludgeOutComplete.txt", "at", encoding='utf-8') as f:    
+                f.write(str(starttime) + ' %s 슬러치 배출 완료\n'%(location))
+            
         except:
-            print('error outButtonClick MainWindowEmailSetting')
+            print('error outButtonClick MainWindowEmailSetting outButtonClicck')
             pass
 
        
