@@ -6,7 +6,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 PLC.log
-/Log
+/log
 /dist
 =======
 =======
@@ -53,4 +53,4 @@ PLC.log
 PLC.log.20200109
 =======
 >>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
-.gitignore
+
