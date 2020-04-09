@@ -14,6 +14,7 @@ from PyQt5.QtCore import QTimer
 from enums import Coils, Machine, Regs, Monitoring, OptimizerData
 from MainWindow import MainWindow
 from datetime import datetime
+import time
  
 class MonitoringWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -23,6 +24,10 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         # 연결 위치 : key, Plc Connection Object : Value
         self.plcConnectDict = {} 
         self.ip = None
+
+        self.dataCount = 0
+        self.receiveTime = []
+        self.receiveData = []
         
         self.statusLabelList = []
         self.locationButtonList = []
@@ -44,10 +49,16 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
         self.timer2 = QTimer(self)
         # 30분 정도에 한번씩 운전상황 업데이트 시간 체크하여 새벽 12시 이후에 운전상황 업데이트
-        self.timer2.setInterval(1000 * 60  * 30)
+        self.timer2.setInterval(1000 * 60  * 60)
         self.timer2.start()
         self.timer2.timeout.connect(self.optimizeStatus)
         # self.setFocusPolicy(Qt.Qt.Strong)
+
+        # 하트비트 핑 패킷 체크용
+        self.timer3 = QTimer(self)
+        self.timer3.setInterval(1000 * 10  * 1)
+        self.timer3.start()
+        self.timer3.timeout.connect(self.pingPrint)
 
         
         
@@ -112,9 +123,9 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             
             # 일단 연결이 안된걸 확인, 재연결 시도 후 연결 안되면 모든 데이터에 0을 삽입
             try:
-                # if(self.plcConnectDict[location] == False):
-                #     print('c연결시도')
-                #     self.plcConnectDict[location] = (self.connect(self.connectListDict[j])) 
+                if(self.plcConnectDict[location] == False):
+                    print('c연결시도')
+                    self.plcConnectDict[location] = (self.connect(self.connectListDict[j])) 
 
                 
                 onoff = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.AUTOMATICSTART.value, 1)
@@ -252,8 +263,9 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             print(time)
             
             # 새벽 12시 기준으로 운전상황을 업데이트 할것이다.
-            if(time[2] != 0):
-                return
+            # 테스트 중에는 1시간에 1번으로.
+            # if(time[2] != 0):
+            #     return
             
             # 알고리즘 계산시 사용할 변수들 시작번지 1400
             optimizeData = self.plcConnectDict[location].readRegister(machineStartReg + 1400, 13)
@@ -291,7 +303,51 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 # print('zero division Error')
                 return 'error'
 
-           
+    def resultPrint(self):
+        # print('%d 개의 데이터를 받음'%self.dataCount)
+        # print('성공 : %d, 실패 %d'%(self.receiveData.count(44770), self.receiveData.count(False)))
+        # print('Min = %.3fms, Max = %.3fms, Avg = %.3fms'%(min(self.receiveTime),max(self.receiveTime),
+        #  sum(self.receiveTime) / len(self.receiveTime)))
+
+        with open("Log/PingTestLog.txt", "at") as f:
+            f.write('%d 개의 데이터를 받음\n'%self.dataCount)
+            f.write('성공 : %d, 실패 %d\n'%(self.receiveData.count(True), self.receiveData.count(False)))
+            f.write('Min = %.3fms, Max = %.3fms, Avg = %.3fms\n'%(min(self.receiveTime),max(self.receiveTime),
+             sum(self.receiveTime) / len(self.receiveTime)))
+
+    def pingPrint(self):
+        try:
+            location = 'kwtkorea.iptime.org'
+            plc = SyncClient()
+            if(plc.connectClient(location)):
+                data = 0
+                self.dataCount += 1
+                beforeTime = datetime.now()
+                beforeTime2 = time.time()
+                print(str(beforeTime) + ' connect %s'%location)
+                # 44770
+                data = plc.readRegister(4900,10)
+                plc.closeClient()
+                afterTime = datetime.now()
+                afterTime2 = time.time()
+                # print('data ', data[0])
+                runTime = round((afterTime2 - beforeTime2) * 1000, 5)
+
+                with open("Log/PingTestLog.txt", "at", encoding='utf-8') as f:
+                    f.write(str(beforeTime) + ' connect %s\n'%location)
+                    f.write(str(runTime)+'ms\n')
+
+
+                self.receiveTime.append(runTime)
+                self.receiveData.append(True)
+
+            else: 
+                self.dataConut += 1
+                receiveData.append(False) 
+
+            self.resultPrint()     
+        except:
+            self.resultPrint()      
 
 
 if __name__ == '__main__':

@@ -150,7 +150,11 @@ class MainWindowOperatingTimeTab(QWidget):
 
     def changePartAlarmOccur(self):
         emailSender = EmailSender.instance()
-        emailReciver = self.parent.lineEdit_replacePartEmail.text()
+        # 부품 교체 담당자, 재고 확보 담당자, 부품 생산 담당자 이메일 
+        replaceMailReciver = self.parent.lineEdit_replacePartEmail.text()
+        expendablesMailReciver = self.parent.lineEdit_ExpendablesPartEmail.text()
+        productionPartEmailReciver = self.parent.lineEdit_ProductionPartEmail.text()
+
         location = self.parent.machineName
 
         for i in range(0 , len(self.timeLabelList)):
@@ -165,7 +169,9 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 준비 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 준비 부품 : %s \n 부품 재고를 확인해주세요' %(location,
                             self.opLabelList[i].text())
-                            emailSender.emailSend(reciver=emailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 준비 알람 메일 발송\n'%(location, self.opLabelList[i].text()))
@@ -179,7 +185,9 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 필요 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 필요 부품 : %s \n 부품을 교체해주세요' %(location,
                             self.opLabelList[i].text())
-                            emailSender.emailSend(reciver=emailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 필요 알람 메일 발송\n'%(location, self.opLabelList[i].text()))
@@ -203,8 +211,9 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 준비 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 준비 부품 : %s \n 부품 재고를 확인해주세요' %(location, 
                             self.addedRowDict[i][0].toPlainText())
-                            emailSender.emailSend(reciver=emailReciver,subject=subject, msg=msg)
-
+                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 준비 알람 메일 발송\n'%(location, self.addedRowDict[i][0].toPlainText()))
@@ -218,7 +227,9 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 필요 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 필요 부품 : %s \n 부품 교체가 필요합니다.' %(location,
                             self.addedRowDict[i][0].toPlainText())
-                            emailSender.emailSend(reciver=emailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 필요 알람 메일 발송\n'%(location, self.addedRowDict[i][0].toPlainText()))

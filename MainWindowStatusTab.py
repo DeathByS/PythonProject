@@ -89,6 +89,7 @@ class MainWindowStatusTab(QWidget):
         
         try:
             data = getData.getDataInRange('InfoData','timeData', str(oneHourago), str(current),self.parent.machineName)
+            print(data)
 
         except:
             return 'error'
@@ -105,9 +106,13 @@ class MainWindowStatusTab(QWidget):
         self.statusLabelList[8].display(sludgeOutputPerHour)
 
         # 투입 / 배출 함수율 (아직 함수율 측정기가 완성되지 않았으므로 설정된 값으로..)
+        if(len(data) == 0):
+            inputWaterRate = 0
+            outputWaterRate = 0
+        else:
+            inputWaterRate = data[len(data)-1]['inputwaterRate'] 
+            outputWaterRate = data[len(data)-1]['outputwaterRate']
 
-        inputWaterRate = data[len(data)-1]['inputwaterRate'] 
-        outputWaterRate = data[len(data)-1]['outputwaterRate']
         self.statusLabelList[4].display(inputWaterRate)
         self.statusLabelList[6].display(outputWaterRate)
         

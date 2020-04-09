@@ -29,15 +29,22 @@ class MainWindowEmailSettingTab(QWidget):
         
     def initWidget(self):
         self.replacePartEmail = self.parent.lineEdit_replacePartEmail
+        self.expendablesPartEmail = self.parent.lineEdit_ExpendablesPartEmail
+        self.productionPartEmail = self.parent.lineEdit_ProductionPartEmail
         regex = QRegExp("\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}\\b")
         validator = QRegExpValidator(regex)
         self.replacePartEmail.setValidator(validator)
+        self.expendablesPartEmail.setValidator(validator)
+        self.productionPartEmail.setValidator(validator)
+
         self.sludgeOutEmail = self.parent.lineEdit_sludgeOutEmail
         self.sludgeOutEmail.setValidator(validator)
 
         self.emailList.append(self.replacePartEmail)
+        self.emailList.append(self.expendablesPartEmail)
+        self.emailList.append(self.productionPartEmail)
         self.emailList.append(self.sludgeOutEmail)
-
+ 
         regexNum = QRegExp("\\b[0-9]+[0-9]")
         validatorNum = QRegExpValidator(regexNum)
         self.parent.lineEdit_sludgeOut.setValidator(validatorNum)
@@ -55,7 +62,11 @@ class MainWindowEmailSettingTab(QWidget):
                  return
             else:
                 self.emailList[0].setText(response.json()[0]['replacePartEmail'])
-                self.emailList[1].setText(response.json()[0]['sludgeOutEmail'])
+                self.emailList[1].setText(response.json()[0]['expendablesPartEmail'])
+                self.emailList[2].setText(response.json()[0]['productionPartEmail'])
+                self.emailList[3].setText(response.json()[0]['sludgeOutEmail'])
+                
+
         except:
             pass
 
@@ -84,7 +95,9 @@ class MainWindowEmailSettingTab(QWidget):
 
         data['machineName'] = self.parent.machineName
         data['replacePartEmail'] = self.emailList[0].text()
-        data['sludgeOutEmail'] = self.emailList[1].text()
+        data['expendablesPartEmail'] = self.emailList[1].text()
+        data['productionPartEmail'] =  self.emailList[2].text()
+        data['sludgeOutEmail'] = self.emailList[3].text()
 
         # url = 'http://kwtkorea.iptime.org:8080/EmailData/?machineName=%s&%s=%s'%(self.parent.machineName, emailColumn, email) 
         url = 'http://kwtkorea.iptime.org:8080/EmailData/?machineName=%s'%self.parent.machineName
@@ -128,7 +141,7 @@ class MainWindowEmailSettingTab(QWidget):
             location = self.parent.machineName
             starttime = datetime.now()
             with open("log/SludgeOutComplete.txt", "at", encoding='utf-8') as f:    
-                f.write(str(starttime) + ' %s 슬러치 배출 완료\n'%(location))
+                f.write(str(starttime) + ' %s 슬러지 배출 완료\n'%(location))
             
         except:
             print('error outButtonClick MainWindowEmailSetting outButtonClicck')

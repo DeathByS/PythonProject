@@ -79,10 +79,6 @@ class MainWindowAbnormalSignTab(QWidget):
         baseRightBalance = 0
         baseCoolingWaterTemp = 0
         baseTransformersTemp = 0
-
-
-
-
         # try:
 
         data = getData.getDataInRange('InfoData','timeData', str(ago), str(current),self.parent.machineName)
@@ -103,8 +99,8 @@ class MainWindowAbnormalSignTab(QWidget):
         self.alarmCause.append((baseRightBalance /length) * 1.5)
 
         # 온도 초과 이상
-        self.alarmCause.append((baseCoolingWaterTemp /length + 30) * 1.2)
-        self.alarmCause.append((baseTransformersTemp /length + 30) * 1.2)
+        self.alarmCause.append((baseCoolingWaterTemp /length) * 1.2)
+        self.alarmCause.append((baseTransformersTemp /length) * 1.2)
         
         # 고형물화수율 데이터 저장용으로 리스트 한 개 더 늘려놓음
         self.alarmCause.append(0)

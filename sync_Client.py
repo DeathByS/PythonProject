@@ -66,11 +66,12 @@ class SyncClient:
                 self.client = ModbusClient(self.connectIp, port) 
                 print(self.client)
                 if self.client.connect():
-                    print("self.client")
-                    return "error"
-                else:
                     print("after connect", self.client)
                     return self.client    
+                else:
+                   print("self.client")
+                   return "error"
+                    
             except:
                 print("error")
                 return "error"
@@ -94,19 +95,28 @@ class SyncClient:
             
 
     def writeRegisters(self, startRegister=600, data=[1]*15):
-        self.client.write_registers(startRegister, data, unit=UNIT)
+        try:
+            self.client.write_registers(startRegister, data, unit=UNIT)
+        except:
+            return False
 
     def readCoil(self, startBit=0, endBit=26):
         
-        readCoils = None
+        try:
+            readCoils = None
         
-        readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
+            readCoils = self.client.read_coils(startBit, endBit, unit=UNIT) 
+
+            if(readCoils != None):
+                return readCoils.bits
+            else:
+                return False
+
+        except:
+            return False
         # print("rr.coil", readCoils.bits)
         
-        if(readCoils is not None):
-            return readCoils.bits
-        else:
-            return readCoils
+        
 
     def readRegister(self, startBit=0, count =15):
 
@@ -125,7 +135,7 @@ class SyncClient:
                 return readHoldingRegs.registers
             except:
                 print("read error")
-                return "read error"
+                return False
         # assert(not rq.isError())     # test that we are not an error
         # print("rr.registers", rr.registers)
         # ----------------------------------------------------------------------- #
