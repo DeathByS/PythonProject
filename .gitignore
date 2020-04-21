@@ -54,3 +54,8 @@ PLC.log.20200109
 =======
 >>>>>>> 9b64d96e126f0ad5afd1672ecbff5f6dbdb07b15
 
+log/AbnormalSignAlarmLog.txt
+log/OptimizeStatusChangeLog.txt
+log/SludgeInOutLog.txt
+log/SludgeOutComplete.txt
+log/SludgeOutEmailSendLog.txt

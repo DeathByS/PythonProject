@@ -89,7 +89,7 @@ class MainWindowStatusTab(QWidget):
         
         try:
             data = getData.getDataInRange('InfoData','timeData', str(oneHourago), str(current),self.parent.machineName)
-            print(data)
+            # print(data)
 
         except:
             return 'error'

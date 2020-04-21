@@ -276,8 +276,8 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
             try:
                 dcV =   (
-                        ((1 - (1 - optimizeData[OptimizerData.BASEINPUTWATERRATE.value]/100) / (1 - optimizeData[OptimizerData.BASEOUTPUTWATERRATE.value]/100))/ 
-                        (1 - (1 - optimizeData[OptimizerData.AVGINPUTWATERRATE.value] /100) / (1 - optimizeData[OptimizerData.AVGOUTPUTWATERRATE.value] /100)))*
+                        ((1 - (1 - optimizeData[OptimizerData.BASEINPUTWATERRATE.value]/1000) / (1 - optimizeData[OptimizerData.BASEOUTPUTWATERRATE.value]/1000))/ 
+                        (1 - (1 - optimizeData[OptimizerData.AVGINPUTWATERRATE.value] /1000) / (1 - optimizeData[OptimizerData.AVGOUTPUTWATERRATE.value] /1000)))*
                         (optimizeData[OptimizerData.AVGSLUDGEINPUT.value]/ optimizeData[OptimizerData.BASESLUDGEINPUT.value]) * optimizeData[OptimizerData.BASEDCV.value]
                         )
 
@@ -296,7 +296,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 self.plcConnectDict[location].writeRegisters(machineStartReg + 250, data)
 
                 with open("log/OptimizeStatusChangeLog.txt", "a", encoding='utf-8') as f:    
-                    f.write(str(starttime) + ' %s 운전 조건 변경 전압 %d 드럼속도 %d 푸셔속도 %d'%(self.locationButtonList[i].text()
+                    f.write(str(starttime) + ' %s 운전 조건 변경 전압 %d 드럼속도 %d 푸셔속도 %d\n'%(self.locationButtonList[i].text()
                     ,int(dcV), int(drumFrq), int(pusherFrq)))
 
             except:
