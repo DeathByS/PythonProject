@@ -70,10 +70,13 @@ class GetDataFromDB(SingletonInstane):
 class EmailSender(SingletonInstane):
 
     def __init__(self):
-        pass
+        self.s = None
+        
+    
+    def openSMTP(self, smtpName = "smtp.naver.com", smtpPort = 587):
+        self.s = smtplib.SMTP(smtpName, smtpPort) #메일 서버 연결
 
-
-    def emailSend(self, sender = "ghwhrlf@naver.com", reciver = "ghwhrlf@gmail.com", password = "w1r1g1w1w!", smtpName = "smtp.naver.com", 
+    def emailSend(self, sender = "ghwhrlf@naver.com", reciver = ["ghwhrlf@gmail.com",], password = "w1r1g1w1w!", smtpName = "smtp.naver.com", 
                  smtpPort = 587, subject='', msg = ''):
 
         print('emailSend In', subject, msg)
@@ -83,11 +86,14 @@ class EmailSender(SingletonInstane):
 
         msg['Subject'] = subject
         msg['From'] = sender
-        msg['To'] = reciver
+        msg['To'] = ", ".join(reciver)
         print(msg.as_string())
-
-        s=smtplib.SMTP(smtpName, smtpPort) #메일 서버 연결
-        s.starttls() #TLS 보안 처리
-        s.login(sender, password)
-        s.sendmail(sender, reciver, msg.as_string()) #메일 전송, 문자열로 변환하여 보냅니다.
-        s.close() #smtp 서버 연결을 종료합니다.
+        self.s = smtplib.SMTP(smtpName, smtpPort) #메일 서버 연결
+        self.s.starttls() #TLS 보안 처리
+        self.s.login(sender, password)
+        self.s.sendmail(sender, reciver, msg.as_string()) #메일 전송, 문자열로 변환하여 보냅니다.
+        self.s.quit()
+    
+    def quitSMTP(self):
+        if self.s is not None:
+            self.s.quit()    

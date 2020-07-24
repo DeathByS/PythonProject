@@ -12,15 +12,18 @@ from PyQt5.QtCore import QTimer
 from enums import Regs
 from enums import Alarms, Machine, AbnormalSignAlarm, OptimizerData
 import datetime
+from pytz import timezone
+
 from SingletonInstance import GetDataFromDB
 import time
+import os
 
 
 
 class MainWindowAbnormalSignTab(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)   
-        
+        print('init MainWindowAbnormalSignTab')
         # MainWindow 폼의 위젯을 조작할 것이기 때문에 MainWindow를 parent로 받아 MainWindow의 위젯을 조작함
         self.parent = parent
 
@@ -61,7 +64,7 @@ class MainWindowAbnormalSignTab(QWidget):
         self.timer.timeout.connect(self.insertAlarmList)
 
     def loadAlarmList(self):
-        with open('data/AbnormalSign.txt', 'r', encoding='utf-8') as f:
+        with open("data/AbnormalSign.txt", 'r', encoding='utf-8') as f:
            self.alarmList = f.readlines()
 
 
@@ -92,20 +95,24 @@ class MainWindowAbnormalSignTab(QWidget):
             baseCoolingWaterTemp += i['drumcolingWater']
             baseTransformersTemp += i['transformersTemp']
             
-        print('baseData %f %f %f %f'%(baseLeftBalance/length,baseRightBalance/length,baseCoolingWaterTemp/length ,baseTransformersTemp/length))    
 
-        # 사행 횟수 이상
-        self.alarmCause.append((baseLeftBalance /length) * 1.5)
-        self.alarmCause.append((baseRightBalance /length) * 1.5)
+        try:    
+            print('baseData %f %f %f %f'%(baseLeftBalance/length,baseRightBalance/length,baseCoolingWaterTemp/length ,baseTransformersTemp/length))    
 
-        # 온도 초과 이상
-        self.alarmCause.append((baseCoolingWaterTemp /length) * 1.2)
-        self.alarmCause.append((baseTransformersTemp /length) * 1.2)
+            # 사행 횟수 이상
+            self.alarmCause.append((baseLeftBalance /length) * 1.5)
+            self.alarmCause.append((baseRightBalance /length) * 1.5)
+
+            # 온도 초과 이상
+            self.alarmCause.append((baseCoolingWaterTemp /length) * 1.2)
+            self.alarmCause.append((baseTransformersTemp /length) * 1.2)
+            
+        except:
+            print('no data')
+            pass
         
         # 고형물화수율 데이터 저장용으로 리스트 한 개 더 늘려놓음
         self.alarmCause.append(0)
-        
-        
         # except:
             # print('error')
 
@@ -212,11 +219,13 @@ class MainWindowAbnormalSignTab(QWidget):
         # msgbox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;")
         msgbox.setWindowTitle('알람 발생')
         msgbox.setText(text)
+        msgbox.setModal(False)
         msgbox.setStandardButtons(QtWidgets.QMessageBox.Yes)
         msgboxYesBtn = msgbox.button(QtWidgets.QMessageBox.Yes)
         msgboxYesBtn.setText("확인")
 
-        ret = msgbox.exec_()
+        # ret = msgbox.exec_()
+        ret = msgbox.show()
 
     
        

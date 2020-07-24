@@ -1,6 +1,7 @@
 # coding: utf-8
  
 import sys
+import os
 import csv
 import image_rc
 
@@ -12,14 +13,21 @@ from sync_Client import SyncClient
 from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QTimer
 from enums import Coils, Machine, Regs, Monitoring, OptimizerData
+from MainWindowOperatingTimeTab import MainWindowOperatingTimeTab
 from MainWindow import MainWindow
 from datetime import datetime
 import time
- 
+
+
 class MonitoringWindow(QtWidgets.QMainWindow):
+    
     def __init__(self):
         super().__init__()
-        uic.loadUi('MonitoringForm.ui', self)
+       
+        # path = os.path.abspath('MonitoringForm.ui')
+        
+        print(os.getcwd())
+        uic.loadUi(os.getcwd()+"\MonitoringForm.ui", self)
 
         # 연결 위치 : key, Plc Connection Object : Value
         self.plcConnectDict = {} 
@@ -49,7 +57,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 
         self.timer2 = QTimer(self)
         # 30분 정도에 한번씩 운전상황 업데이트 시간 체크하여 새벽 12시 이후에 운전상황 업데이트
-        self.timer2.setInterval(1000 * 60  * 60)
+        self.timer2.setInterval(1000 * 60 * 60)
         self.timer2.start()
         self.timer2.timeout.connect(self.optimizeStatus)
         # self.setFocusPolicy(Qt.Qt.Strong)
@@ -60,12 +68,12 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         self.timer3.start()
         self.timer3.timeout.connect(self.pingPrint)
 
-        
+   
         
 
     def initConnectionList(self):
-    
-        with open('data/ConnectionList.csv', 'r', encoding='utf-8') as f:
+        print(os.getcwd())
+        with open("data/ConnectionList.csv", 'r', encoding='utf-8') as f:
             rdr = csv.reader(f)
             
             connList = [] 
@@ -76,15 +84,18 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 #  self.connectListBox.addItem(row[0])
 
             self.connectListDict = dict(connList)
-            # print(self.connectListDict)
+            print(self.connectListDict)
 
     def initPlcConnect(self):
             # 딕셔너리의 키만 받아서 리스트 같이 사용
         for i in self.connectListDict.keys():
             try:
                 self.plcConnectDict[i] = (self.connect(self.connectListDict[i]))
+                print('plcConnectDict[i] = ', self.plcConnectDict[i])
             except:
+            
                 self.plcConnectDict[i] = False
+                print('plcConnectDict[i] = ', self.plcConnectDict[i])
 
 
     def initStatusLabel(self):
@@ -92,7 +103,11 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         for i in range(1, Monitoring.NUMBEROFLABELS.value + 1):
             # 오브젝트의 이름을 가지고 오브젝트 찾아 사용하는법.
             labelName = "label_%d" % i
+            # print(labelName)
             self.statusLabelList.append(self.findChild(QtWidgets.QLabel, labelName))
+
+    
+                
 
     def initLocationButton(self):
         for i in range(1, Monitoring.NUMBEROFBUTTONS.value + 1):
@@ -104,31 +119,43 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             i.clicked.connect(lambda state, button=i : self.slotConnectButton(state, button))
 
 
-    def connect(self, ip = "kwtkorea.iptime.org"):
+    def connect(self, ip):
         plcConnect = SyncClient()
-        plcConnect.connectClient(ip, 502)
-        return plcConnect
+        if plcConnect.connectClient(ip, 502):
+            print(plcConnect)
+            return plcConnect
+        else:
+            print('connect error')
+            return False
+
+        
 
     def changeStatusLabel(self):
-        # print("changes")
+        print("changes %d"%len(self.locationButtonList))
         
-
         dataList = []
+        connectList = self.connectListDict.keys()
+        afterLocation = ''
 
-
-        
         for j in range(len(self.locationButtonList)): 
             
             location, machineStartReg, machineStartCoil = self.setLocation(self.locationButtonList[j].text())
             
             # 일단 연결이 안된걸 확인, 재연결 시도 후 연결 안되면 모든 데이터에 0을 삽입
-            try:
-                if(self.plcConnectDict[location] == False):
+            
+            if(self.plcConnectDict[location] == False):
+                if(self.connectListDict[location] != afterLocation):
                     print('c연결시도')
-                    self.plcConnectDict[location] = (self.connect(self.connectListDict[j])) 
+                    print(self.plcConnectDict[location])
+                    print(self.connectListDict)
+                    self.plcConnectDict[location] = (self.connect(self.connectListDict[location]))
+                    afterLocation = self.connectListDict[location]
 
-                
+
+
+            try:    
                 onoff = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.AUTOMATICSTART.value, 1)
+                # print(onoff)
                 dcV = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCV.value, 1)
                 dcA = self.plcConnectDict[location].readRegister(machineStartReg + Regs.DCA.value, 1)
                 alarm = self.plcConnectDict[location].readCoil(machineStartCoil + Coils.REMOTESTOP.value, 1)
@@ -149,11 +176,11 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             dataList.append(dcV)
             dataList.append(dcA)
             dataList.append(alarm)
-        
-        
+
+            # print(dataList)
         
         index = 0
-
+        
         for i in range(Monitoring.NUMBEROFDATA.value):
             # index 0:onoff 1:DCV 2:DCA 3:ALARM
 
@@ -165,6 +192,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 onoff = 'Off'
                 backgroundcolor = 'color:#ec2400;'
 
+            # print('index %d'%index)
             self.statusLabelList[index].setStyleSheet('background-image: url(:/image/label4.png); ' + backgroundcolor)
             self.statusLabelList[index].setFont(QFont('맑은 고딕', 14))
 
@@ -309,7 +337,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
         # print('Min = %.3fms, Max = %.3fms, Avg = %.3fms'%(min(self.receiveTime),max(self.receiveTime),
         #  sum(self.receiveTime) / len(self.receiveTime)))
 
-        with open("Log/PingTestLog.txt", "at") as f:
+        with open("log/PingTestLog.txt", "at") as f:
             f.write('%d 개의 데이터를 받음\n'%self.dataCount)
             f.write('성공 : %d, 실패 %d\n'%(self.receiveData.count(True), self.receiveData.count(False)))
             f.write('Min = %.3fms, Max = %.3fms, Avg = %.3fms\n'%(min(self.receiveTime),max(self.receiveTime),
@@ -330,20 +358,22 @@ class MonitoringWindow(QtWidgets.QMainWindow):
                 plc.closeClient()
                 afterTime = datetime.now()
                 afterTime2 = time.time()
-                # print('data ', data[0])
+                # print('pingdata ', data[0])
                 runTime = round((afterTime2 - beforeTime2) * 1000, 5)
 
-                with open("Log/PingTestLog.txt", "at", encoding='utf-8') as f:
+                with open("log/PingTestLog.txt", "at", encoding='utf-8') as f:
                     f.write(str(beforeTime) + ' connect %s\n'%location)
                     f.write(str(runTime)+'ms\n')
 
 
                 self.receiveTime.append(runTime)
                 self.receiveData.append(True)
+                # print('ping ok')
 
             else: 
-                self.dataConut += 1
-                receiveData.append(False) 
+                self.dataCount += 1
+                # print('ping false')
+                self.receiveData.append(False) 
 
             self.resultPrint()     
         except:
@@ -353,6 +383,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     w = MonitoringWindow()
+    w.optimizeStatus()
     w.show()
     sys.exit(app.exec())
    

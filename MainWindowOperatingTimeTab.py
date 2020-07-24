@@ -18,7 +18,7 @@ import csv
 class MainWindowOperatingTimeTab(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)   
-        
+        print('init MainWindowOperatingTimeTab')
         # MainWindow 폼의 위젯을 조작할 것이기 때문에 MainWindow를 parent로 받아 MainWindow의 위젯을 조작함
         self.parent = parent
         self.opLabelList = []
@@ -28,10 +28,14 @@ class MainWindowOperatingTimeTab(QWidget):
         self.alarmCheck = [False] * 7
         
         self.timer = QTimer(self)
-        self.timer.setInterval(5000)
+        self.timer.setInterval(1000 * 60 * 1)
         self.timer.start()
         self.timer.timeout.connect(self.changeTimeLabel)
-        self.timer.timeout.connect(self.changePartAlarmOccur)
+
+        self.timer3 = QTimer(self)
+        self.timer3.setInterval(1000 * 10)
+        self.timer3.start()
+        self.timer3.timeout.connect(self.changePartAlarmOccur)
 
         self.timer2 = QTimer(self)
         self.timer2.setInterval(1000 * 60 * 5)
@@ -47,8 +51,8 @@ class MainWindowOperatingTimeTab(QWidget):
  
         self.parent.pushButton_insertRow.clicked.connect(self.insertRowButtonClicked)
         
-        self.parent.pushButton_confirm.setAutoRepeat(True)
-        self.parent.pushButton_confirm.setAutoRepeatInterval(10)
+        # self.parent.pushButton_confirm.setAutoRepeat(True)
+        # self.parent.pushButton_confirm.setAutoRepeatInterval(10)
         self.parent.pushButton_confirm.pressed.connect(self.confirmButtonClick)
        
         # self.parent.pushButton_confirm.pressed.connect(self.confirmButtonClick)
@@ -57,13 +61,13 @@ class MainWindowOperatingTimeTab(QWidget):
     def initWidget(self):
         # plc에서 직접 송신하는 값 받는 라벨
         OpAlarmTimeList = [] 
-        
+        # print('initWidget')
         try:
-            with open('data/OpAlarmTime_%s.csv'%self.parent.machineName, 'r', encoding='utf-8') as f:
+            with open("data/OpAlarmTime_%s.csv"%self.parent.machineName, 'r', encoding='utf-8') as f:
                 rdr = csv.reader(f)
                 for row in rdr:
                     OpAlarmTimeList.append(row)
-        except:
+        except: 
             print('file not found')
             pass
 
@@ -119,7 +123,7 @@ class MainWindowOperatingTimeTab(QWidget):
             # print('colIdx : %d'%self.colIndex)
 
     def changeTimeLabel(self):
-
+        print('changTimeLabel')
         try:
             timeList = self.parent.plcConnect.readRegister(self.parent.machineStartReg + OperatingTime.TOTALMIN.value, 
                                                         OperatingTime.FILTERHOUR.value - OperatingTime.TOTALMIN.value + 1)
@@ -150,10 +154,20 @@ class MainWindowOperatingTimeTab(QWidget):
 
     def changePartAlarmOccur(self):
         emailSender = EmailSender.instance()
+        # emailSender.openSMTP()
         # 부품 교체 담당자, 재고 확보 담당자, 부품 생산 담당자 이메일 
         replaceMailReciver = self.parent.lineEdit_replacePartEmail.text()
         expendablesMailReciver = self.parent.lineEdit_ExpendablesPartEmail.text()
         productionPartEmailReciver = self.parent.lineEdit_ProductionPartEmail.text()
+
+        reciver = []
+        reciver.append(replaceMailReciver)
+        reciver.append(expendablesMailReciver)
+        reciver.append(productionPartEmailReciver)
+
+        print('reciver list')
+
+        print(reciver)
 
         location = self.parent.machineName
 
@@ -169,9 +183,11 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 준비 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 준비 부품 : %s \n 부품 재고를 확인해주세요' %(location,
                             self.opLabelList[i].text())
-                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                            
+                            emailSender.emailSend(reciver=reciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                            
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 준비 알람 메일 발송\n'%(location, self.opLabelList[i].text()))
@@ -185,9 +201,11 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 필요 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 필요 부품 : %s \n 부품을 교체해주세요' %(location,
                             self.opLabelList[i].text())
-                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                            
+                            emailSender.emailSend(reciver=reciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                           
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 필요 알람 메일 발송\n'%(location, self.opLabelList[i].text()))
@@ -211,9 +229,11 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 준비 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 준비 부품 : %s \n 부품 재고를 확인해주세요' %(location, 
                             self.addedRowDict[i][0].toPlainText())
-                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                           
+                            emailSender.emailSend(reciver=reciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                            
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 준비 알람 메일 발송\n'%(location, self.addedRowDict[i][0].toPlainText()))
@@ -227,14 +247,18 @@ class MainWindowOperatingTimeTab(QWidget):
                             subject = '한국워터테크놀로지 부품 교체 필요 알림 메일입니다.'
                             msg = '기기 이름 : %s\n 교체 필요 부품 : %s \n 부품 교체가 필요합니다.' %(location,
                             self.addedRowDict[i][0].toPlainText())
-                            emailSender.emailSend(reciver=replaceMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
-                            emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                            
+                            emailSender.emailSend(reciver=reciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=expendablesMailReciver,subject=subject, msg=msg)
+                            # emailSender.emailSend(reciver=productionPartEmailReciver,subject=subject, msg=msg)
+                            
+                            
                             time = datetime.now()
                             with open("log/ChangePartAlarmLog.txt", "at", encoding='utf-8') as f:
                                 f.write(str(time) + ' %s %s 부품 교체 필요 알람 메일 발송\n'%(location, self.addedRowDict[i][0].toPlainText()))
             except:
                 continue
+            
 
 
     @pyqtSlot()  # pyqtSlot 데코레이터는 꼭 필요는 없다. 하지만 메모리 사용 및 호출 속도에서 약간의 이득을 얻을 수 있다.
@@ -378,10 +402,24 @@ class MainWindowOperatingTimeTab(QWidget):
     @pyqtSlot()
     def confirmButtonClick(self):
         print('in confirmButton')
+        print('reciver list')
+        replaceMailReciver = self.parent.lineEdit_replacePartEmail.text()
+        expendablesMailReciver = self.parent.lineEdit_ExpendablesPartEmail.text()
+        productionPartEmailReciver = self.parent.lineEdit_ProductionPartEmail.text()
+
+        reciver = []
+        reciver.append(replaceMailReciver)
+        reciver.append(expendablesMailReciver)
+        reciver.append(productionPartEmailReciver)
+
+        
+
+        print(reciver)
+
 
         # plc에서 직접 값 받아오는 행의 설정 시간 저장
 
-        with open(('data/OpAlarmTime_%s.csv'%self.parent.machineName), 'w', encoding='utf-8', newline='') as f:
+        with open('data/OpAlarmTime_%s.csv'%self.parent.machineName, 'w', encoding='utf-8', newline='') as f:
             rdr = csv.writer(f)
             
             for (i, j) in zip(self.refTimeLineEditList, self.alarmTimeLineEditList):
@@ -464,6 +502,3 @@ class MainWindowOperatingTimeTab(QWidget):
             url = response.json()[0]['url'] 
 
             response = requests.put(url=url, data = data)  
-
-
-

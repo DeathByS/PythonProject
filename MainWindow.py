@@ -1,6 +1,7 @@
 # coding: utf-8
  
 import sys
+import os
 import csv
 import image_rc
 
@@ -18,15 +19,21 @@ from MainWindowAbnormalSignTab  import MainWindowAbnormalSignTab
 from MainWindowEmailSettingTab  import MainWindowEmailSettingTab
 from SludgeInOutCheck import SludgeInOutCheck
 
+
+
  
 class MainWindow(QtWidgets.QDialog):
-    def __init__(self, machineName ='', location = 'kwtkorea.iptime.org', startReg =0, StartCoil= 0):
+    
+    def __init__(self, machineName ='', location='', startReg =0, StartCoil= 0):
         # QtWidgets.QDialog.__init__(self, parent)
         
         #         super().__init__() uic.loadUi('MainForm.ui', self)
         #  closeEvent 사용을 하려면 self.ui에 form을 load 하는것이 아니라 자기 자신에게 Form을 로드해야됨.
         super().__init__()
-        uic.loadUi('MainForm.ui', self)
+    
+        # path = os.path.abspath('MainForm.ui')
+        print('init MainWindow')
+        uic.loadUi("./MainForm.ui", self)
 
         # self.ui.tabWidget.addTab(MainWindowTab1(), MainWindowTab1.__name__)
         # self.ui.tabWidget.addTab(MainWindowTab1(), MainWindowTab1.__name__)
@@ -52,7 +59,11 @@ class MainWindow(QtWidgets.QDialog):
         self.mainWindowInfoTab = MainWindowInfoTab(self)
         self.mainWindowStatusTab = MainWindowStatusTab(self)
         self.mainWindowAlarmTab = MainWindowAlarmTab(self)
-        self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
+        try:
+            self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
+            print('success')
+        except:
+            print('false')
         self.mainWindowAbnormalSignTab = MainWindowAbnormalSignTab(self)
         self.MainWindowEmailSettingTab = MainWindowEmailSettingTab(self)
         self.SludgeInOutCheck = SludgeInOutCheck(self)
@@ -65,7 +76,7 @@ class MainWindow(QtWidgets.QDialog):
         
         self.setWindowTitle(machineName)       
 
-    def connect(self, ip = "kwtkorea.iptime.org"):
+    def connect(self, ip):
         self.plcConnect.connectClient(ip ,502)
 
 

@@ -13,7 +13,7 @@ import time
 class MainWindowInfoTab(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)   
-        
+        print('init MainWindowInfoTab')
         # MainWindow 폼의 위젯을 조작할 것이기 때문에 MainWindow를 parent로 받아 MainWindow의 위젯을 조작함
         self.parent = parent
         self.lcdList = []
@@ -25,7 +25,7 @@ class MainWindowInfoTab(QWidget):
         self.initWidget()
 
         self.timer = QTimer(self)
-        self.timer.setInterval(10000)
+        self.timer.setInterval(1000 * 10)
         self.timer.start()
         self.timer.timeout.connect(self.changelcdData)
 
@@ -63,21 +63,24 @@ class MainWindowInfoTab(QWidget):
         try:
             regs = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Regs.DRUMFRQ.value, 
                                                         Regs.SLIPRINGTEMP.value + 1)
+
+            #regs 10, 11번 = 슬러지 투입 / 배출량 Kg 단위에서 Ton 단위로 변환
+            regs[Regs.INPUT.value] = regs[Regs.INPUT.value] / 10
+            regs[Regs.OUTPUT.value] = regs[Regs.OUTPUT.value] / 10
+            # 전압 값을 소수점 단위로 나타내기 위해 
+            regs[Regs.DCV.value] = regs[Regs.DCV.value] / 10
+
+            # 현장 데이터에서 / 10 해줘야 정상 데이터로 표시됨
+            regs[Regs.DRUMFRQ.value] = regs[Regs.DRUMFRQ.value] / 10
+            regs[Regs.PRESSROLLFRQ.value] = regs[Regs.PRESSROLLFRQ.value] / 10
+            regs[Regs.SLUDEGSUPPLYFRQ.value] = regs[Regs.SLUDEGSUPPLYFRQ.value] / 10
+            regs[Regs.SLUDEGSPREADFRQ.value] = regs[Regs.SLUDEGSPREADFRQ.value] / 10
+            regs[Regs.DRUMCOLLINGWATER.value] = regs[Regs.DRUMCOLLINGWATER.value] / 10
+            regs[Regs.TRANSFORMERSTEMP.value] = regs[Regs.TRANSFORMERSTEMP.value] / 10
+            
+
         except:
             return
-        #regs 10, 11번 = 슬러지 투입 / 배출량 Kg 단위에서 Ton 단위로 변환
-        regs[Regs.INPUT.value] = regs[Regs.INPUT.value] / 10
-        regs[Regs.OUTPUT.value] = regs[Regs.OUTPUT.value] / 10
-        # 전압 값을 소수점 단위로 나타내기 위해 
-        regs[Regs.DCV.value] = regs[Regs.DCV.value] / 10
-
-        # 현장 데이터에서 / 10 해줘야 정상 데이터로 표시됨
-        regs[Regs.DRUMFRQ.value] = regs[Regs.DRUMFRQ.value] / 10
-        regs[Regs.PRESSROLLFRQ.value] = regs[Regs.PRESSROLLFRQ.value] / 10
-        regs[Regs.SLUDEGSUPPLYFRQ.value] = regs[Regs.SLUDEGSUPPLYFRQ.value] / 10
-        regs[Regs.SLUDEGSPREADFRQ.value] = regs[Regs.SLUDEGSPREADFRQ.value] / 10
-        regs[Regs.DRUMCOLLINGWATER.value] = regs[Regs.DRUMCOLLINGWATER.value] / 10
-        regs[Regs.TRANSFORMERSTEMP.value] = regs[Regs.TRANSFORMERSTEMP.value] / 10
         
         # colis2, regs2 = self.parent.plcConnect2.readRegister()
         print(regs)

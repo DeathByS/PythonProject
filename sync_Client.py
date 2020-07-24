@@ -54,27 +54,27 @@ UNIT = 0x1
 class SyncClient:
     def __init__(self):
         self.client = None
-        self.connectIp = "kwtkorea.iptime.org"
+        self.connectIp = 0
         
 
-    def connectClient(self, connectIp="kwtkorea.iptime.org", port=502):
+    def connectClient(self, connectIp, port=502, timeout = 1):
         self.connectIp = connectIp
         print(self.connectIp)
         if self.client is None:
             
             try:
-                self.client = ModbusClient(self.connectIp, port) 
+                self.client = ModbusClient(self.connectIp, port, timeout = timeout) 
                 print(self.client)
                 if self.client.connect():
                     print("after connect", self.client)
                     return self.client    
                 else:
                    print("self.client")
-                   return "error"
+                   return False
                     
             except:
                 print("error")
-                return "error"
+                return False 
         
        
 
@@ -152,7 +152,7 @@ class SyncClient:
 # 코드가 인터프리터에 의해 직접 실행 될 때 실행되는 부분
 if __name__ == "__main__":
     test = SyncClient()
-    test.connectClient(connectIp='kwtujb.iptime.org')
+    test.connectClient(connectIp='61.146.82.9')
     # while True:
     holdingRegitsters = test.readRegister()
         # coils = test.readCoil()

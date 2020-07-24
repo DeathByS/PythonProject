@@ -60,7 +60,7 @@ class MainWindowAbnormalSignTab(QWidget):
         self.timer.timeout.connect(self.insertAlarmList)
 
     def loadAlarmList(self):
-        with open('data/AbnormalSign.txt', 'r', encoding='utf-8') as f:
+        with open("data/AbnormalSign.txt", 'r', encoding='utf-8') as f:
            self.alarmList = f.readlines()
 
 

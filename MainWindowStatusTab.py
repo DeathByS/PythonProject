@@ -16,7 +16,7 @@ import datetime
 class MainWindowStatusTab(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)   
-        
+        print('init MainWindowStatusTab')
         # MainWindow 폼의 위젯을 조작할 것이기 때문에 MainWindow를 parent로 받아 MainWindow의 위젯을 조작함
         self.parent = parent
         self.statusLabelList = []

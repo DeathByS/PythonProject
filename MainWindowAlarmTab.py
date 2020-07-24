@@ -14,6 +14,7 @@ from enums import Alarms, Machine
 from datetime import datetime
 import time
 import pickle
+import os
 from SingletonInstance import GetDataFromDB
 from SingletonInstance import EmailSender
 
@@ -21,7 +22,7 @@ from SingletonInstance import EmailSender
 class MainWindowAlarmTab(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)   
-        
+        print('init MainWindowAlarmTab')
         # MainWindow 폼의 위젯을 조작할 것이기 때문에 MainWindow를 parent로 받아 MainWindow의 위젯을 조작함
         self.parent = parent
 
@@ -65,7 +66,7 @@ class MainWindowAlarmTab(QWidget):
         self.timer2.timeout.connect(self.sludgeOutCheck)
 
     def loadAlarmList(self):
-        with open('data/AlarmList.bin', 'rb') as f:
+        with open("data/AlarmList.bin", 'rb') as f:
            self.alarmList = pickle.load(f)
 
         #    print(self.alarmList[Alarms.PANELEMERGENCYSTOP.name])  
@@ -82,6 +83,7 @@ class MainWindowAlarmTab(QWidget):
                                                             Alarms.ENDLIST.value + 1)
         self.alarmCount = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Alarms.PANELEMERGENCYSTOP.value
                                                              + Machine.ALARMCOUNTSTART.value, Alarms.ENDLIST.value + 1)
+
         # print(self.alarmCause)
         for i in Alarms:
             
@@ -136,6 +138,7 @@ class MainWindowAlarmTab(QWidget):
         # msgbox.setStyleSheet("QLabel{min-width:500 px; font-size: 24px;")
         msgbox.setWindowTitle('알람 발생')
         msgbox.setText(text)
+        msgbox.setModal(False)
         msgbox.setStandardButtons(QtWidgets.QMessageBox.Yes)
         msgboxYesBtn = msgbox.button(QtWidgets.QMessageBox.Yes)
         msgboxYesBtn.setText("확인")
@@ -167,22 +170,26 @@ class MainWindowAlarmTab(QWidget):
         try:
             # coil 144 = 배출 슬러지량 초과 시 활성화 되는 reg
             sludgeCheck = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + 144, 1)
-
+            print('sludge kg ', sludgeCheck)
            
 
             if(sludgeCheck[0]):
 
                 # coil 146 = 메일 중복 발송을 막기 위해 사용
                 self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 146, [1] * 1)
-
+                
                 emailSender = EmailSender.instance()
                 emailReciver = self.parent.lineEdit_sludgeOutEmail.text()
+                reciver = []
+                reciver.append(emailReciver)
 
                 location = self.parent.machineName
 
                 subject = '%s 배출 슬러지 배차 알람 메일 입니다'%location
                 msg = '슬러지 량이 설정된 값을 초과하여 배출 알림 메일을 보냅니다.'
-                emailSender.emailSend(reciver=emailReciver,subject=subject, msg=msg)
+                # emailSender.openSMTP()
+                emailSender.emailSend(reciver=reciver,subject=subject, msg=msg)
+                # emailSender.close()
                 Time = datetime.now()
 
                 with open("log/SludgeOutEmailSendLog.txt", "at", encoding='utf-8') as f:
