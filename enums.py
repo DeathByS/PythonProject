@@ -10,14 +10,13 @@ class Regs(enum.Enum):
     DCA                = 5
     DRUMCOLLINGWATER   = 6
     TRANSFORMERSTEMP   = 7
-    SCRTEMP            = 8
-    CAPACITY           = 9  
-    INPUT              = 10
-    OUTPUT             = 11
-    WATERRATE          = 12
-    LEFTBALANCE        = 13
-    RIGHTBALANCE       = 14
-    SLIPRINGTEMP       = 15
+    INPUT              = 8
+    OUTPUT             = 9  
+    INPUTWATERRATE     = 10
+    OUTPUTWATERRATE    = 11
+    LEFTBALANCE        = 12
+    RIGHTBALANCE       = 13
+    KW                 = 36
     
     
 
@@ -40,10 +39,11 @@ class Coils(enum.Enum):
     SLIPRINGCOLLINGFAN      = 61
     AUTOMATICSTART          = 62
     AUTOMATICSTOP           = 63
-    REMOTESTOP              = 80
-    OUTPUTCONVEYOR          = 81
-    RESET                   = 94
-    WATCHDOG                = 95
+    REMOTESTOP              = 64
+    OUTPUTCONVEYOR          = 65
+    SLUDGEOUTEMAILSIGN      = 69
+    # RESET                   = 94
+    # WATCHDOG                = 95
 
 
 
@@ -103,16 +103,19 @@ class Alarms(enum.Enum):
 
 class AbnormalSignAlarm(enum.Enum):
 
-    OUTOFTIME                   = 112
-    LEFTBALANCE                 = 113
-    RIGHTBALANCE                = 114
-    ENDLIST                     = 114
+    OUTOFTIME                   = 66
+    LEFTBALANCE                 = 67
+    RIGHTBALANCE                = 68
+    ENDLIST                     = 68
     
 
 
 
 
 class Machine(enum.Enum):
+
+    TERMOFREG                   = 100
+    TERMOFCOIL                  = 160 
 
     ALARMCOUNTSTART             = 50
     EXCALARMSWITCHSTART         = 128
@@ -128,28 +131,28 @@ class Machine(enum.Enum):
 
 class OperatingTime(enum.Enum):
 
-    TOTALMIN                    = 21
-    TOTALHOUR                   = 22
-    DRUMMIN                     = 23
-    DRUMHOUR                    = 24
-    SLUDGESCRAPERMIN            = 25
-    SLUDGESCRAPERHOUR           = 26
-    CLEANERMIN                  = 27
-    CLEANERHOUR                 = 28
-    CLOSESENSORMIN              = 29
-    CLOSESENSORHOUR             = 30
-    WATERTANKMIN                = 31
-    WATERTANKHOUR               = 32
-    FILTERMIN                   = 33
-    FILTERHOUR                  = 34
+    TOTALMIN                    = 14
+    TOTALHOUR                   = 15
+    DRUMMIN                     = 16
+    DRUMHOUR                    = 17
+    SLUDGESCRAPERMIN            = 18
+    SLUDGESCRAPERHOUR           = 19
+    CLEANERMIN                  = 20
+    CLEANERHOUR                 = 21
+    CLOSESENSORMIN              = 22
+    CLOSESENSORHOUR             = 23
+    WATERTANKMIN                = 24
+    WATERTANKHOUR               = 25
+    FILTERMIN                   = 26
+    FILTERHOUR                  = 27
 
 
 class Monitoring(enum.Enum):
 
-    NUMBEROFBUTTONS         =   5     
-    NUMBEROFLABELS          =   20
+    NUMBEROFBUTTONS         =   8     
+    NUMBEROFLABELS          =   32
     # 데이터 라인 줄 수, 현장 하나 추가할때마다 하나씩 추가
-    NUMBEROFDATA            =   4
+    NUMBEROFDATA            =   8
 
 class OpTimeTab(enum.Enum):
 
@@ -158,16 +161,27 @@ class OpTimeTab(enum.Enum):
 
 class OptimizerData(enum.Enum):
 
-    AVGINPUTWATERRATE       =   0
-    AVGOUTPUTWATERRATE      =   2
-    AVGSLUDGEINPUT          =   4
-    AVGSLUDGEOUTPUT         =   6
-    AVGDCA                  =   8
-    BASEINPUTWATERRATE      =   1
-    BASEOUTPUTWATERRATE     =   3
-    BASESLUDGEINPUT         =   5
-    BASESLUDGEOUTPUT        =   7
-    BASEDCA                 =   9
-    BASEDCV                 =   10
-    BASEDRUMFRQ             =   11
-    BASEPUSSERFRQ           =   12
+    AVGINPUTWATERRATE       =   3000
+    AVGOUTPUTWATERRATE      =   3002
+    AVGSLUDGEINPUT          =   3004
+    AVGSLUDGEOUTPUT         =   3006
+    AVGDCA                  =   3008
+    BASEINPUTWATERRATE      =   3001
+    BASEOUTPUTWATERRATE     =   3003
+    BASESLUDGEINPUT         =   3005
+    BASESLUDGEOUTPUT        =   3007
+    BASEDCA                 =   3009
+    BASEDCV                 =   3010
+    BASEDRUMFRQ             =   3011
+    BASEPUSSERFRQ           =   3012
+
+class WriteValue(enum.Enum):
+
+    VOLTAGE                 =   4000
+    DRUMFRQ                 =   4001
+    INPUTFRQ                =   4002
+    SLUDGEOUTWEIGHT         =   4003
+
+    STAGERESET              =   8000
+    SLUDGEOUTRESET          =   8001
+    SLUDGEOUTEMAILSTOP      =   8002

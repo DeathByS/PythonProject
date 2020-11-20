@@ -75,10 +75,6 @@ class SyncClient:
             except:
                 print("error")
                 return False 
-        
-       
-
-        
 
     def closeClient(self):
         if self.client is not None:
@@ -124,25 +120,14 @@ class SyncClient:
         if self.client is not None:
 
             try:
-        # rq = client.write_coil(0, False, unit=UNIT)
-              
-        # assert(rr.bits[0] == True)          # test the expected value
-        # log.debug("Write to a holding register and read back")
-        # rq = client.write_register(30, 10, unit=UNIT)
+       
                 readHoldingRegs = self.client.read_holding_registers(startBit, count, unit=UNIT)
-                # print("rr.registers", readHoldingRegs.registers)
-
+             
                 return readHoldingRegs.registers
             except:
                 print("read error")
                 return False
-        # assert(not rq.isError())     # test that we are not an error
-        # print("rr.registers", rr.registers)
-        # ----------------------------------------------------------------------- #
-        # close the client
-        # ----------------------------------------------------------------------- #
-        # self.client.close()
-        # time.sleep(2)
+        
            
         else:
             print("check connect")

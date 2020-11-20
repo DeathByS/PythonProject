@@ -7,7 +7,7 @@ from PyQt5.QtCore import QModelIndex
 from PyQt5.QtCore import QTimer
 from PyQt5.QtCore import QRegExp
 from PyQt5.QtGui  import QRegExpValidator
-from enums import Regs, Machine
+from enums import Regs, Machine, WriteValue
 import time
 from datetime import datetime
 import requests
@@ -72,8 +72,8 @@ class MainWindowEmailSettingTab(QWidget):
 
 
         try:
-             # reg 320 = 배출 슬러지 무게 설정
-            value = self.parent.plcConnect.readRegister(self.parent.machineStartReg + 320, 1)
+             # reg 4003 = 배출 슬러지 무게 설정
+            value = self.parent.plcConnect.readRegister(WriteValue.SLUDGEOUTWEIGHT.value, 1)
             print(value[0])
             self.parent.lineEdit_sludgeOut.setText(str(value[0]))
 
@@ -125,8 +125,8 @@ class MainWindowEmailSettingTab(QWidget):
             outValue = int(self.parent.lineEdit_sludgeOut.text())
             print('outValue = %d'%outValue)
             
-            self.parent.plcConnect.writeRegisters(self.parent.machineStartReg + 320, [outValue] * 1)
-            # value = self.parent.plcConnect.readRegister(self.parent.machineStartReg + 320, 1)
+            self.parent.plcConnect.writeRegisters(WriteValue.SLUDGEOUTWEIGHT.value, [outValue] * 1)
+            value = self.parent.plcConnect.readRegister(WriteValue.SLUDGEOUTWEIGHT.value, 1)
             # print(value)
         except:
             return('error setSludgeOut MainWindowEmailSetting')    
@@ -135,9 +135,9 @@ class MainWindowEmailSettingTab(QWidget):
     @pyqtSlot()
     def outButtonClick(self, state, button):
         try:
-            # coil 145 = 배출량 초기화용 스위치 변수
-            self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 145, [1] *1)
-            self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 145, [0] *1)
+            # coil 8001 = 배출량 초기화용 스위치 변수
+            self.parent.plcConnect.writeCoils(WriteValue.SLUDGEOUTRESET.value, [1] *1)
+            self.parent.plcConnect.writeCoils(WriteValue.SLUDGEOUTRESET.value, [0] *1)
             location = self.parent.machineName
             starttime = datetime.now()
             with open("log/SludgeOutComplete.txt", "at", encoding='utf-8') as f:    

@@ -62,13 +62,17 @@ class MainWindowInfoTab(QWidget):
         
         try:
             regs = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Regs.DRUMFRQ.value, 
-                                                        Regs.SLIPRINGTEMP.value + 1)
+                                                        Regs.KW.value + 1)
 
             #regs 10, 11번 = 슬러지 투입 / 배출량 Kg 단위에서 Ton 단위로 변환
             regs[Regs.INPUT.value] = regs[Regs.INPUT.value] / 10
             regs[Regs.OUTPUT.value] = regs[Regs.OUTPUT.value] / 10
             # 전압 값을 소수점 단위로 나타내기 위해 
-            regs[Regs.DCV.value] = regs[Regs.DCV.value] / 10
+
+            if(self.parent.machineName == '검단_A' or self.parent.machineName == '검단_B'):
+                pass
+            else:    
+                regs[Regs.DCV.value] = regs[Regs.DCV.value] / 10
 
             # 현장 데이터에서 / 10 해줘야 정상 데이터로 표시됨
             regs[Regs.DRUMFRQ.value] = regs[Regs.DRUMFRQ.value] / 10
@@ -96,14 +100,14 @@ class MainWindowInfoTab(QWidget):
             self.lcdList[2].display(float(regs[Regs.SLUDEGSUPPLYFRQ.value]))
             self.lcdList[3].display(float(regs[Regs.SLUDEGSPREADFRQ.value]))
             self.lcdList[4].display(float(regs[Regs.TRANSFORMERSTEMP.value]))
-            self.lcdList[5].display(float(regs[Regs.SCRTEMP.value]))
+            # self.lcdList[5].display(float(regs[Regs.SCRTEMP.value]))
             self.lcdList[6].display(float(regs[Regs.DRUMCOLLINGWATER.value]))
-            self.lcdList[7].display(float(regs[Regs.SLIPRINGTEMP.value]))
+            # self.lcdList[7].display(float(regs[Regs.SLIPRINGTEMP.value]))
 
             #전압, 전력 lcd
             self.lcdList[8].display(float(regs[Regs.DCV.value]))
             self.lcdList[9].display(float(regs[Regs.DCA.value]))
-            self.lcdList[10].display(float(regs[Regs.CAPACITY.value]))
+            self.lcdList[10].display(float(regs[Regs.KW.value]))
             self.lcdList[11].display(float(regs[Regs.DCV.value] * regs[Regs.DCA.value] / 1000))
 
             # 사행회수, 슬러지 배출, 소모품 교체, 알람, 이상

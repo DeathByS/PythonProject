@@ -76,8 +76,8 @@ class EmailSender(SingletonInstane):
     def openSMTP(self, smtpName = "smtp.naver.com", smtpPort = 587):
         self.s = smtplib.SMTP(smtpName, smtpPort) #메일 서버 연결
 
-    def emailSend(self, sender = "ghwhrlf@naver.com", reciver = ["ghwhrlf@gmail.com",], password = "w1r1g1w1w!", smtpName = "smtp.naver.com", 
-                 smtpPort = 587, subject='', msg = ''):
+    def emailSend(self, sender = "ghwhrlf@naver.com", reciver = ["ghwhrlf@gmail.com",], 
+    password = "w1r1g1w1w!", smtpName = "smtp.naver.com", smtpPort = 587, subject='', msg = ''):
 
         print('emailSend In', subject, msg)
 

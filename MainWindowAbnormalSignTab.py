@@ -125,7 +125,7 @@ class MainWindowAbnormalSignTab(QWidget):
         location = self.parent.machineName
         
         # 고형물회수율 계산용 데이터
-        optimizeData = self.parent.plcConnect.readRegister(self.parent.machineStartReg + 1400, 13)
+        optimizeData = self.parent.plcConnect.readRegister(OptimizerData.AVGINPUTWATERRATE.value, 13)
 
         print('optimizeData')
         print(optimizeData)
@@ -133,7 +133,7 @@ class MainWindowAbnormalSignTab(QWidget):
 
         # 
         data = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Regs.DRUMFRQ.value, 
-                                                        Regs.SLIPRINGTEMP.value + 1)
+                                                        Regs.KW.value + 1)
 
         currentData = []
         currentData.append(data[Regs.LEFTBALANCE.value])
@@ -150,8 +150,8 @@ class MainWindowAbnormalSignTab(QWidget):
         try:
             solidsCaptureRate = (
             (
-                (optimizeData[OptimizerData.AVGSLUDGEOUTPUT.value] / optimizeData[OptimizerData.AVGSLUDGEINPUT.value])) /
-                ((1 - (optimizeData[OptimizerData.AVGINPUTWATERRATE.value] /100)) / (1 - (optimizeData[OptimizerData.AVGOUTPUTWATERRATE.value])/100))
+                (optimizeData[OptimizerData.AVGSLUDGEOUTPUT.value - 3000] / optimizeData[OptimizerData.AVGSLUDGEINPUT.value - 3000])) /
+                ((1 - (optimizeData[OptimizerData.AVGINPUTWATERRATE.value - 3000] /100)) / (1 - (optimizeData[OptimizerData.AVGOUTPUTWATERRATE.value - 3000])/100))
             )
         except ZeroDivisionError:
             solidsCaptureRate = 0.0
