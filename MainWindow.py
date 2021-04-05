@@ -44,7 +44,7 @@ class MainWindow(QtWidgets.QDialog):
 
         # plc 와 연결하여 plc Data를 받아오는 객체
         self.plcConnect = SyncClient()
-        self.plcConnect.connectClient(location)
+        self.plcConnect.connectClient("kwtkorea.iptime.org")
         self.ip = None
         
         # 현장의 기계 A,B,C호기의 시작 주소를 나타내고, 각 탭에서 시작 주소를 통해 A,B,C호기의 데이터를 출력
@@ -59,11 +59,7 @@ class MainWindow(QtWidgets.QDialog):
         self.mainWindowInfoTab = MainWindowInfoTab(self)
         self.mainWindowStatusTab = MainWindowStatusTab(self)
         self.mainWindowAlarmTab = MainWindowAlarmTab(self)
-        try:
-            self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
-            print('success')
-        except:
-            print('false')
+        self.mainWindowOperatingTimeTab = MainWindowOperatingTimeTab(self)
         self.mainWindowAbnormalSignTab = MainWindowAbnormalSignTab(self)
         self.MainWindowEmailSettingTab = MainWindowEmailSettingTab(self)
         self.SludgeInOutCheck = SludgeInOutCheck(self)
@@ -72,7 +68,7 @@ class MainWindow(QtWidgets.QDialog):
         self.timer = QTimer(self)
         self.timer.setInterval(1000 * 5)
         self.timer.start()
-        self.timer.timeout.connect(self.SludgeInOutCheck.insertSludgeInOut)
+        # self.timer.timeout.connect(self.SludgeInOutCheck.insertSludgeInOut)
         
         self.setWindowTitle(machineName)       
 

@@ -9,8 +9,8 @@ from PyQt5 import uic
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtCore import QTimer
-from enums import Regs
-from enums import Alarms, Machine
+from enums import Regs, Coils
+from enums import Alarms, Machine, WriteValue
 from datetime import datetime
 import time
 import pickle
@@ -169,14 +169,14 @@ class MainWindowAlarmTab(QWidget):
         
         try:
             # coil 144 = 배출 슬러지량 초과 시 활성화 되는 reg
-            sludgeCheck = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + 144, 1)
-            print('sludge kg ', sludgeCheck)
+            sludgeCheck = self.parent.plcConnect.readCoil(self.parent.machineStartCoil + Coils.SLUDGEOUTEMAILSIGN.value, 1)
+            # print('sludge kg ', sludgeCheck)
            
 
             if(sludgeCheck[0]):
 
                 # coil 146 = 메일 중복 발송을 막기 위해 사용
-                self.parent.plcConnect.writeCoils(self.parent.machineStartCoil + 146, [1] * 1)
+                self.parent.plcConnect.writeCoils(WriteValue.SLUDGEOUTEMAILSTOP.value, [1] * 1)
                 
                 emailSender = EmailSender.instance()
                 emailReciver = self.parent.lineEdit_sludgeOutEmail.text()

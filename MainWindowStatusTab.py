@@ -206,7 +206,7 @@ class MainWindowStatusTab(QWidget):
 
         except:
             pass
-
+ 
         print('total %d %d'%(totalInputWaterRate, totalOutputWaterRate))
 
         
