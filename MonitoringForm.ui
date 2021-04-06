@@ -109,11 +109,7 @@ font: 12pt &quot;HY헤드라인M&quot;;</string>
          <x>0</x>
          <y>0</y>
          <width>1253</width>
-<<<<<<< HEAD
          <height>1124</height>
-=======
-         <height>1068</height>
->>>>>>> f7216c652dd1515240903db4491b6130c232cd7a
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
@@ -1734,13 +1730,8 @@ color: rgb(0, 0, 0);</string>
             </property>
            </widget>
           </item>
-<<<<<<< HEAD
           <item row="4" column="5">
            <widget class="QLabel" name="label_36">
-=======
-          <item row="3" column="5">
-           <widget class="QLabel" name="label_32">
->>>>>>> f7216c652dd1515240903db4491b6130c232cd7a
             <property name="minimumSize">
              <size>
               <width>0</width>
