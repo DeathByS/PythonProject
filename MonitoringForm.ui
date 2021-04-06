@@ -109,11 +109,7 @@ font: 12pt &quot;HY헤드라인M&quot;;</string>
          <x>0</x>
          <y>0</y>
          <width>1253</width>
-<<<<<<< HEAD
          <height>1124</height>
-=======
-         <height>1068</height>
->>>>>>> f7216c652dd1515240903db4491b6130c232cd7a
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">

@@ -242,11 +242,7 @@ class MonitoringWindow(QtWidgets.QMainWindow):
             except:
                 print('bool object error')
                 pass
-<<<<<<< HEAD
-            # print(f"index is {index}") 
-=======
             # print(f"index is {index}")    
->>>>>>> f7216c652dd1515240903db4491b6130c232cd7a
                 
             
         # self.optimizeStatus()     
