@@ -27,7 +27,7 @@ class MainWindowInfoTab(QWidget):
         self.timer = QTimer(self)
         self.timer.setInterval(1000 * 10)
         self.timer.start()
-        self.timer.timeout.connect(self.changelcdData)
+        self.timer.timeout.connect(self.updatelcdData)
 
     
         
@@ -58,7 +58,7 @@ class MainWindowInfoTab(QWidget):
         self.lcdList.append(self.parent.lcdData_18)
 
         
-    def changelcdData(self):
+    def updatelcdData(self):
         
         try:
             regs = self.parent.plcConnect.readRegister(self.parent.machineStartReg + Regs.DRUMFRQ.value, 
@@ -86,9 +86,8 @@ class MainWindowInfoTab(QWidget):
         except:
             return
         
-        # colis2, regs2 = self.parent.plcConnect2.readRegister()
         print(regs)
-        if regs == 'read error':
+        if regs == False:
             self.timer.stop()
             print("read error, check Connect ")
             return "error"
