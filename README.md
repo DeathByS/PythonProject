@@ -13,6 +13,9 @@
 * FrontEnd - Python(QT, Modbus)
 * BackEnd - Django, MariaDB, Modbus
 
+## Sample Code
+
+* https://github.com/DeathByS/PythonProject/blob/master/SampleCode.md
 
 ## 프로그램 구동 사진 
 
