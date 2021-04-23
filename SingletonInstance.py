@@ -40,8 +40,6 @@ class GetDataFromDB(SingletonInstane):
         response = requests.get(url=url)
         
         print(response.status_code)
-        # print(response.text)
-        # print(response[0]['sludgeInput'])
 
         if response.status_code != 200:
             return response.status_code
@@ -61,11 +59,6 @@ class GetDataFromDB(SingletonInstane):
         else: 
             return response.json()
 
-# c = GetDataFromDB.instance()
-
-# c.getDataInRange('InfoData', '서울_A', 'timeData', '2020-02-14 00:00:00', '2020-02-17 00:00:00')
-
-# # c.print()
 
 class EmailSender(SingletonInstane):
 
