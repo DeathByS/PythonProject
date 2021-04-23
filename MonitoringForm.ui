@@ -108,8 +108,8 @@ font: 12pt &quot;HY헤드라인M&quot;;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1253</width>
-         <height>1124</height>
+         <width>1236</width>
+         <height>1168</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
@@ -340,21 +340,68 @@ color: rgb(0, 0, 0);</string>
           </item>
          </layout>
         </item>
+        <item row="5" column="0">
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>174</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="6" column="0">
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>174</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_11">
           <item row="0" column="5">
            <widget class="QLabel" name="label_333">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <family>HY헤드라인M</family>
-              <pointsize>12</pointsize>
+              <family>HY견고딕</family>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-image: url(:/image/label2.png);</string>
+             <string notr="true">background-image: url(:/image/label2.png);
+font: 11pt &quot;HY견고딕&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -364,6 +411,9 @@ color: rgb(0, 0, 0);</string>
             </property>
             <property name="text">
              <string>알람 발생</string>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -377,15 +427,16 @@ color: rgb(0, 0, 0);</string>
            <widget class="QLabel" name="label_332">
             <property name="font">
              <font>
-              <family>HY헤드라인M</family>
-              <pointsize>12</pointsize>
+              <family>HY견고딕</family>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-image: url(:/image/label3.png);</string>
+             <string notr="true">background-image: url(:/image/label3.png);
+font: 11pt &quot;HY견고딕&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -412,17 +463,24 @@ color: rgb(0, 0, 0);</string>
               <height>50</height>
              </size>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <family>HY헤드라인M</family>
-              <pointsize>12</pointsize>
+              <family>HY견고딕</family>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-image: url(:/image/label2.png);</string>
+             <string notr="true">background-image: url(:/image/label2.png);
+font: 11pt &quot;HY견고딕&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -451,15 +509,16 @@ color: rgb(0, 0, 0);</string>
             </property>
             <property name="font">
              <font>
-              <family>HY헤드라인M</family>
-              <pointsize>12</pointsize>
+              <family>HY견고딕</family>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-image: url(:/image/label3.png);</string>
+             <string notr="true">background-image: url(:/image/label3.png);
+font: 11pt &quot;HY견고딕&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -480,17 +539,30 @@ color: rgb(0, 0, 0);</string>
           </item>
           <item row="0" column="3">
            <widget class="QLabel" name="label_331">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <family>HY헤드라인M</family>
-              <pointsize>12</pointsize>
+              <family>HY견고딕</family>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-image: url(:/image/label1.png);</string>
+             <string notr="true">background-image: url(:/image/label1.png);
+font: 11pt &quot;HY견고딕&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -513,14 +585,14 @@ color: rgb(0, 0, 0);</string>
            <widget class="QLabel" name="label_341">
             <property name="minimumSize">
              <size>
-              <width>0</width>
+              <width>99</width>
               <height>50</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <family>HY헤드라인M</family>
-              <pointsize>12</pointsize>
+              <family>HY견고딕</family>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <italic>false</italic>
               <bold>false</bold>
@@ -531,7 +603,8 @@ color: rgb(0, 0, 0);</string>
             </property>
             <property name="styleSheet">
              <string notr="true">background-image: url(:/image/label1.png);
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+font: 11pt &quot;HY견고딕&quot;;</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::StyledPanel</enum>
@@ -552,66 +625,6 @@ color: rgb(255, 255, 255);</string>
           </item>
          </layout>
         </item>
-        <item row="5" column="0">
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="0">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>174</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="1">
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>634</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item row="6" column="0">
-         <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="0">
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>174</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
         <item row="4" column="0">
          <layout class="QGridLayout" name="gridLayout_6">
           <item row="0" column="0">
@@ -621,6 +634,12 @@ color: rgb(255, 255, 255);</string>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>99</width>
+              <height>0</height>
+             </size>
             </property>
             <property name="font">
              <font>
@@ -1313,17 +1332,6 @@ color: rgb(0, 0, 0);</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::WinPanel</enum>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton#pushButton_7
-{
-	border-image: url(:/image/label1.png);  
-}
-QPushButton:hover#pushButton_7
-{
-	border-image: url(:/image/label4.png); 
-	color: rgb(0, 0, 0);
-}</string>
             </property>
             <property name="text">
              <string/>
@@ -2425,6 +2433,9 @@ color: rgb(0, 0, 0);</string>
           </item>
           <item row="2" column="0">
            <widget class="QPushButton" name="pushButton_4">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -2457,6 +2468,25 @@ QPushButton:hover#pushButton_4
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="1" column="1">
+         <layout class="QGridLayout" name="gridLayout_4"/>
+        </item>
+        <item row="3" column="1">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>500</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>

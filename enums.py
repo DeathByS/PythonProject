@@ -149,10 +149,10 @@ class OperatingTime(enum.Enum):
 
 class Monitoring(enum.Enum):
 
-    NUMBEROFBUTTONS         =   8     
-    NUMBEROFLABELS          =   32
+    NUMBEROFBUTTONS         =   9    
+    NUMBEROFLABELS          =   36
     # 데이터 라인 줄 수, 현장 하나 추가할때마다 하나씩 추가
-    NUMBEROFDATA            =   8
+    NUMBEROFDATA            =   9
 
 class OpTimeTab(enum.Enum):
 
