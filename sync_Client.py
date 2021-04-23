@@ -66,14 +66,14 @@ class SyncClient:
                 self.client = ModbusClient(self.connectIp, port, timeout = timeout) 
                 print(self.client)
                 if self.client.connect():
-                    print("after connect", self.client)
+                    print("connect", self.client)
                     return self.client    
                 else:
-                   print("self.client")
+                   print("connect error")
                    return False
                     
             except:
-                print("error")
+                print("connect error")
                 return False 
 
     def closeClient(self):
@@ -106,32 +106,24 @@ class SyncClient:
             if(readCoils != None):
                 return readCoils.bits
             else:
+                print("read Coil error")
                 return False
-
         except:
             return False
         # print("rr.coil", readCoils.bits)
         
-        
-
     def readRegister(self, startBit=0, count =15):
-
         # log.debug("Write to a Coil and read back")
         if self.client is not None:
-
             try:
-       
                 readHoldingRegs = self.client.read_holding_registers(startBit, count, unit=UNIT)
-             
                 return readHoldingRegs.registers
             except:
-                print("read error")
-                return False
-        
-           
+                print("read Register error")
+                return False 
         else:
             print("check connect")
-            return 1
+            return False
         # return 
 
 # 코드가 인터프리터에 의해 직접 실행 될 때 실행되는 부분

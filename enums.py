@@ -45,10 +45,6 @@ class Coils(enum.Enum):
     # RESET                   = 94
     # WATCHDOG                = 95
 
-
-
-
-
 class Alarms(enum.Enum):
     PANELEMERGENCYSTOP          = 0
     OPEMERGENCYSTOP             = 1
@@ -108,10 +104,6 @@ class AbnormalSignAlarm(enum.Enum):
     RIGHTBALANCE                = 68
     ENDLIST                     = 68
     
-
-
-
-
 class Machine(enum.Enum):
 
     TERMOFREG                   = 100
@@ -127,7 +119,6 @@ class Machine(enum.Enum):
     FIRSTREG                    = 0
     SECONDREG                   = 100
     THIRDREG                    = 200
-
 
 class OperatingTime(enum.Enum):
 

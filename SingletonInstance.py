@@ -33,7 +33,8 @@ class GetDataFromDB(SingletonInstane):
 
     def getDataInRange(self, tableName, colName, start, end, machineName):
 
-        url = self.url%tableName+'?%s__range=%s,%s&machineName=%s'%(colName, start, end, machineName)
+        url = self.url%tableName+'?%s__range=%s,%s&machineName=%s'%(colName, start, 
+        end, machineName)
 
         print(url)
 
